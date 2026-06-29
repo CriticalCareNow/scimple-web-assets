@@ -1,0 +1,919 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+    --navy:#0B1F3A;
+    --navy-2:#102a4c;
+    --ink:#0a1626;
+    --teal:#10B5AE;
+    --teal-deep:#0E8F89;
+    --cyan:#36D6CE;
+    --coral:#FF6B57;
+    --coral-deep:#F5503A;
+    --amber:#FFC24B;
+    --paper:#F6F9FC;
+    --white:#ffffff;
+    --muted:#5b6b80;
+    --line:#e3eaf2;
+    --shadow:0 18px 50px -20px rgba(11,31,58,.35);
+    --shadow-sm:0 8px 24px -12px rgba(11,31,58,.28);
+    --radius:18px;
+    --maxw:1180px;
+    --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font);
+    color:var(--ink);
+    background:var(--white);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%}
+  h1,h2,h3{line-height:1.12;letter-spacing:-.02em;font-weight:800}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--teal-deep);
+  }
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--teal);border-radius:2px}
+
+  /* Buttons */
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-weight:700;font-size:1rem;
+    padding:15px 26px;border-radius:60px;border:0;cursor:pointer;
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--coral),var(--coral-deep));
+    color:#fff;box-shadow:0 14px 30px -10px rgba(245,80,58,.6);
+  }
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 20px 38px -10px rgba(245,80,58,.7)}
+  .btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.28)}
+  .btn-ghost:hover{background:rgba(255,255,255,.16);transform:translateY(-3px)}
+  .btn-dark{background:var(--navy);color:#fff}
+  .btn-dark:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm)}
+  .btn-lg{padding:18px 34px;font-size:1.05rem}
+
+  /* NAV */
+  header.nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    transition:all .3s ease;padding:18px 0;
+  }
+  header.nav.scrolled{
+    background:rgba(255,255,255,.85);backdrop-filter:blur(14px);
+    box-shadow:0 6px 24px -14px rgba(11,31,58,.4);padding:12px 0;
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:1.28rem;color:#fff;letter-spacing:-.02em}
+  header.nav.scrolled .logo{color:var(--navy)}
+  .logo-mark{
+    width:38px;height:38px;border-radius:11px;flex:none;
+    background:linear-gradient(135deg,var(--teal),var(--cyan));
+    display:grid;place-items:center;color:#04201e;font-weight:900;font-size:1.15rem;
+    box-shadow:0 8px 18px -8px rgba(16,181,174,.7);
+  }
+  .logo span.sub{font-weight:500;opacity:.7;font-size:.95rem}
+  nav.links{display:flex;align-items:center;gap:30px}
+  nav.links a{font-weight:600;font-size:.96rem;color:rgba(255,255,255,.9);transition:color .2s}
+  header.nav.scrolled nav.links a{color:var(--navy)}
+  nav.links a:hover{color:var(--cyan)}
+  header.nav.scrolled nav.links a:hover{color:var(--teal-deep)}
+  .nav-cta{display:flex;align-items:center;gap:14px}
+  .menu-btn{display:none;background:none;border:0;cursor:pointer;flex-direction:column;gap:5px;padding:8px}
+  .menu-btn span{width:24px;height:2.5px;background:#fff;border-radius:3px;transition:.3s}
+  header.nav.scrolled .menu-btn span{background:var(--navy)}
+
+  /* HERO */
+  .hero{
+    position:relative;padding:160px 0 110px;
+    background:
+      radial-gradient(1100px 540px at 78% -8%, rgba(54,214,206,.20), transparent 60%),
+      radial-gradient(900px 520px at 8% 16%, rgba(255,107,87,.16), transparent 55%),
+      linear-gradient(160deg,#081a31 0%, var(--navy) 45%, #0d2447 100%);
+    color:#fff;overflow:hidden;
+  }
+  .hero .orb{position:absolute;border-radius:50%;filter:blur(8px);opacity:.5;pointer-events:none}
+  .orb.o1{width:120px;height:120px;background:radial-gradient(circle,var(--cyan),transparent 70%);top:22%;right:14%;animation:float 7s ease-in-out infinite}
+  .orb.o2{width:80px;height:80px;background:radial-gradient(circle,var(--coral),transparent 70%);bottom:18%;left:10%;animation:float 9s ease-in-out infinite reverse}
+  .orb.o3{width:46px;height:46px;background:radial-gradient(circle,var(--amber),transparent 70%);top:30%;left:46%;animation:float 6s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-26px)}}
+  .grid-bg{
+    position:absolute;inset:0;opacity:.4;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+    background-size:54px 54px;mask-image:radial-gradient(1000px 600px at 70% 0%,#000,transparent 75%);
+  }
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.08fr .92fr;gap:50px;align-items:center}
+  .hero-badge{
+    display:inline-flex;align-items:center;gap:9px;
+    background:rgba(54,214,206,.12);border:1px solid rgba(54,214,206,.32);
+    padding:8px 16px;border-radius:60px;font-size:.85rem;font-weight:600;color:#bdf6f1;
+    margin-bottom:22px;
+  }
+  .pulse{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 0 rgba(54,214,206,.7);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(54,214,206,.6)}70%{box-shadow:0 0 0 12px rgba(54,214,206,0)}100%{box-shadow:0 0 0 0 rgba(54,214,206,0)}}
+  .hero h1{font-size:clamp(2.4rem,5vw,3.85rem);margin-bottom:22px}
+  .hero h1 .grad{background:linear-gradient(120deg,var(--cyan),var(--teal) 50%,var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.lede{font-size:1.18rem;color:rgba(233,242,251,.86);max-width:560px;margin-bottom:34px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:38px}
+  .hero-proof{display:flex;gap:30px;flex-wrap:wrap}
+  .hero-proof .pi{display:flex;flex-direction:column}
+  .hero-proof .pi b{font-size:1.7rem;font-weight:800;color:#fff}
+  .hero-proof .pi span{font-size:.82rem;color:rgba(233,242,251,.7)}
+
+  /* Hero card */
+  .hero-card{
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
+    border-radius:24px;padding:28px;backdrop-filter:blur(10px);
+    box-shadow:0 30px 70px -30px rgba(0,0,0,.6);
+  }
+  .hero-card h3{font-size:1.15rem;margin-bottom:6px}
+  .hero-card .sub{font-size:.9rem;color:rgba(233,242,251,.7);margin-bottom:20px}
+  .check-list{display:flex;flex-direction:column;gap:13px}
+  .check-list .ci{display:flex;gap:12px;align-items:flex-start;font-size:.96rem;color:rgba(233,242,251,.92)}
+  .check-list .ci .ico{
+    width:24px;height:24px;border-radius:7px;flex:none;display:grid;place-items:center;
+    background:rgba(16,181,174,.2);color:var(--cyan);font-weight:900;font-size:.85rem;margin-top:1px;
+  }
+  .hero-card .mini-cta{margin-top:22px;width:100%;justify-content:center}
+
+  /* LOGO MARQUEE (above the fold) */
+  .logo-strip{position:relative;margin-top:54px;z-index:2}
+  .logo-strip .ls-label{text-align:center;color:rgba(233,242,251,.55);font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-bottom:18px}
+  .marquee{
+    position:relative;overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+  }
+  .marquee-track{display:flex;width:max-content;gap:16px;animation:scrollx 60s linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+  @keyframes scrollx{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .client-logo{
+    flex:none;height:78px;width:152px;padding:12px 18px;
+    display:flex;align-items:center;justify-content:center;
+    background:#fff;border:1px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 10px 26px -14px rgba(0,0,0,.5);
+    transition:transform .25s,box-shadow .25s;
+  }
+  .client-logo:hover{transform:translateY(-4px);box-shadow:0 16px 30px -12px rgba(0,0,0,.55)}
+  .client-logo img{max-height:100%;max-width:100%;width:auto;height:auto;object-fit:contain;display:block}
+  @media(prefers-reduced-motion:reduce){.marquee-track{animation:none;flex-wrap:wrap;justify-content:center}}
+  @media(max-width:680px){.client-logo{height:66px;width:128px}.logo-strip{margin-top:40px}}
+
+  /* TRUST BAR */
+  .trust{background:var(--navy);padding:26px 0;border-top:1px solid rgba(255,255,255,.08)}
+  .trust-inner{display:flex;align-items:center;justify-content:space-between;gap:30px;flex-wrap:wrap}
+  .trust-label{color:rgba(233,242,251,.55);font-size:.82rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+  .trust-badges{display:flex;gap:34px;flex-wrap:wrap;align-items:center}
+  .tbadge{display:flex;align-items:center;gap:10px;color:rgba(233,242,251,.85);font-weight:700;font-size:.95rem}
+  .tbadge .dot{width:34px;height:34px;border-radius:9px;background:rgba(16,181,174,.16);display:grid;place-items:center;color:var(--cyan)}
+
+  /* SECTION SHELL */
+  section{padding:96px 0}
+  .sec-head{max-width:660px;margin:0 auto 56px;text-align:center}
+  .sec-head h2{font-size:clamp(1.9rem,3.6vw,2.7rem);margin:16px 0 14px;color:var(--navy)}
+  .sec-head p{color:var(--muted);font-size:1.08rem}
+  .center{display:flex;justify-content:center}
+
+  /* SERVICES */
+  .services{background:var(--paper)}
+  .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .svc{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px;
+    position:relative;overflow:hidden;transition:transform .28s ease, box-shadow .28s ease, border-color .28s;
+  }
+  .svc::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--teal),var(--cyan));transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+  .svc:hover{transform:translateY(-8px);box-shadow:var(--shadow);border-color:transparent}
+  .svc:hover::before{transform:scaleX(1)}
+  .svc.feature{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#fff;border-color:transparent}
+  .svc.feature .svc-desc{color:rgba(233,242,251,.8)}
+  .svc.feature h3{color:#fff}
+  .svc-ico{
+    width:54px;height:54px;border-radius:14px;display:grid;place-items:center;margin-bottom:18px;
+    background:linear-gradient(135deg,rgba(16,181,174,.14),rgba(54,214,206,.1));color:var(--teal-deep);
+  }
+  .svc.feature .svc-ico{background:rgba(54,214,206,.18);color:var(--cyan)}
+  .svc h3{font-size:1.22rem;margin-bottom:9px;color:var(--navy)}
+  .svc-desc{color:var(--muted);font-size:.97rem;margin-bottom:16px}
+  .svc-link{font-weight:700;font-size:.92rem;color:var(--teal-deep);display:inline-flex;align-items:center;gap:7px;transition:gap .2s}
+  .svc.feature .svc-link{color:var(--cyan)}
+  .svc-link:hover{gap:12px}
+  .pill{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--amber);color:#5b3d00;padding:4px 10px;border-radius:40px;margin-bottom:14px}
+
+  /* PROCESS */
+  .process{background:#fff}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative}
+  .step{background:var(--paper);border-radius:var(--radius);padding:32px;position:relative;border:1px solid var(--line)}
+  .step .num{
+    width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--coral),var(--coral-deep));
+    color:#fff;font-weight:800;font-size:1.2rem;display:grid;place-items:center;margin-bottom:18px;
+    box-shadow:0 10px 22px -8px rgba(245,80,58,.55);
+  }
+  .step h3{font-size:1.18rem;color:var(--navy);margin-bottom:9px}
+  .step p{color:var(--muted);font-size:.96rem}
+
+  /* WHY / STATS */
+  .why{background:linear-gradient(160deg,#081a31,var(--navy));color:#fff;position:relative;overflow:hidden}
+  .why .grid-bg{opacity:.5}
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center;position:relative}
+  .why h2{font-size:clamp(1.9rem,3.6vw,2.7rem);margin:16px 0 18px}
+  .why p.lede{color:rgba(233,242,251,.82);font-size:1.1rem;margin-bottom:28px}
+  .why-list{display:flex;flex-direction:column;gap:16px}
+  .why-list .wi{display:flex;gap:14px;align-items:flex-start}
+  .why-list .wi .ico{width:30px;height:30px;border-radius:9px;flex:none;background:rgba(16,181,174,.2);color:var(--cyan);display:grid;place-items:center;font-weight:900}
+  .why-list .wi b{display:block;font-size:1.02rem;margin-bottom:2px}
+  .why-list .wi span{color:rgba(233,242,251,.72);font-size:.94rem}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:28px 24px}
+  .stat b{font-size:2.6rem;font-weight:800;display:block;background:linear-gradient(120deg,var(--cyan),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat span{color:rgba(233,242,251,.78);font-size:.92rem;font-weight:600}
+
+  /* FOUNDER */
+  .founder{background:var(--paper)}
+  .founder-card{
+    background:#fff;border-radius:26px;border:1px solid var(--line);overflow:hidden;
+    display:grid;grid-template-columns:.85fr 1.15fr;box-shadow:var(--shadow);
+  }
+  .founder-photo{
+    background:linear-gradient(160deg,var(--navy),var(--navy-2));position:relative;min-height:360px;
+    display:grid;place-items:center;color:#fff;overflow:hidden;
+  }
+  .founder-photo .ring{position:absolute;width:300px;height:300px;border:1.5px dashed rgba(54,214,206,.35);border-radius:50%;animation:spin 30s linear infinite;z-index:1}
+  .founder-photo .ring.r2{width:380px;height:380px;border-color:rgba(255,107,87,.25);animation-duration:42s;animation-direction:reverse}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .founder-img{position:relative;z-index:2;width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+  @media(max-width:980px){.founder-img{max-height:420px}}
+  .founder-body{padding:42px}
+  .founder-body .pill{background:rgba(16,181,174,.14);color:var(--teal-deep)}
+  .founder-body h2{font-size:1.9rem;color:var(--navy);margin-bottom:6px}
+  .founder-body .role{color:var(--teal-deep);font-weight:700;margin-bottom:18px}
+  .founder-body p{color:var(--muted);margin-bottom:16px}
+  .founder-quote{border-left:3px solid var(--teal);padding-left:18px;font-style:italic;color:var(--navy);font-size:1.05rem}
+
+  /* TESTIMONIALS */
+  .testi{background:#fff}
+  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .tcard{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:30px;transition:transform .25s,box-shadow .25s}
+  .tcard:hover{transform:translateY(-6px);box-shadow:var(--shadow-sm)}
+  .stars{color:var(--amber);font-size:1.05rem;margin-bottom:14px;letter-spacing:2px}
+  .tcard p{color:var(--ink);font-size:1rem;margin-bottom:20px}
+  .tperson{display:flex;align-items:center;gap:12px}
+  .tperson .av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--cyan));display:grid;place-items:center;color:#04201e;font-weight:800}
+  .tperson b{display:block;font-size:.95rem;color:var(--navy)}
+  .tperson span{font-size:.84rem;color:var(--muted)}
+  .placeholder-note{font-size:.82rem;color:var(--muted);text-align:center;margin-top:26px;opacity:.8}
+
+  /* FAQ */
+  .faq{background:var(--paper)}
+  .faq-wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+  .qa{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:box-shadow .2s}
+  .qa.open{box-shadow:var(--shadow-sm)}
+  .qa-q{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 24px;cursor:pointer;font-weight:700;color:var(--navy);font-size:1.05rem}
+  .qa-q .plus{width:26px;height:26px;flex:none;border-radius:8px;background:rgba(16,181,174,.12);color:var(--teal-deep);display:grid;place-items:center;font-size:1.2rem;transition:transform .3s,background .3s}
+  .qa.open .qa-q .plus{transform:rotate(45deg);background:var(--teal);color:#fff}
+  .qa-a{max-height:0;overflow:hidden;transition:max-height .35s ease;color:var(--muted)}
+  .qa-a div{padding:0 24px 22px}
+
+  /* CTA / FORM */
+  .cta{background:linear-gradient(160deg,#081a31,var(--navy));color:#fff;position:relative;overflow:hidden}
+  .cta .orb{position:absolute}
+  .cta .orb.c1{width:140px;height:140px;background:radial-gradient(circle,var(--coral),transparent 70%);opacity:.4;top:10%;left:6%;filter:blur(10px);animation:float 8s ease-in-out infinite}
+  .cta .orb.c2{width:100px;height:100px;background:radial-gradient(circle,var(--cyan),transparent 70%);opacity:.4;bottom:14%;right:10%;filter:blur(10px);animation:float 7s ease-in-out infinite reverse}
+  .cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;position:relative}
+  .cta h2{font-size:clamp(2rem,4vw,2.9rem);margin-bottom:18px}
+  .cta p.lede{color:rgba(233,242,251,.82);font-size:1.12rem;margin-bottom:26px}
+  .cta-list{display:flex;flex-direction:column;gap:12px;margin-bottom:8px}
+  .cta-list .ci{display:flex;gap:11px;align-items:center;font-size:1rem;color:rgba(233,242,251,.9)}
+  .cta-list .ci .ico{width:24px;height:24px;border-radius:7px;background:rgba(16,181,174,.2);color:var(--cyan);display:grid;place-items:center;font-weight:900;flex:none}
+  .form-card{background:#fff;border-radius:22px;padding:34px;box-shadow:0 30px 70px -28px rgba(0,0,0,.55)}
+  .form-card h3{color:var(--navy);font-size:1.35rem;margin-bottom:6px}
+  .form-card .fsub{color:var(--muted);font-size:.94rem;margin-bottom:22px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:6px}
+  .field input,.field select,.field textarea{
+    width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:11px;
+    font-family:inherit;font-size:.97rem;color:var(--ink);background:#fbfdff;transition:border .2s,box-shadow .2s;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px rgba(16,181,174,.13)}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .form-card .btn{width:100%;justify-content:center;margin-top:6px}
+  .form-foot{text-align:center;font-size:.82rem;color:var(--muted);margin-top:14px}
+  .form-success{display:none;text-align:center;padding:30px 10px}
+  .form-success.show{display:block}
+  .form-success .big{width:64px;height:64px;border-radius:50%;background:rgba(16,181,174,.14);color:var(--teal-deep);display:grid;place-items:center;font-size:2rem;margin:0 auto 16px}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:rgba(233,242,251,.7);padding:64px 0 30px}
+  .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;margin-bottom:44px}
+  .foot-brand .logo{color:#fff;margin-bottom:14px}
+  .foot-brand p{font-size:.94rem;max-width:300px}
+  .foot-col h4{color:#fff;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+  .foot-col a{display:block;font-size:.94rem;margin-bottom:10px;transition:color .2s}
+  .foot-col a:hover{color:var(--cyan)}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:24px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.86rem}
+
+  /* Reveal animation */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease, transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}.reveal.d5{transition-delay:.4s}
+
+  /* ---- DYNAMIC / MOTION LAYER ---- */
+  /* Scroll progress bar */
+  .scroll-bar{position:fixed;top:0;left:0;height:3px;width:0;z-index:200;
+    background:linear-gradient(90deg,var(--teal),var(--cyan),var(--amber));transition:width .1s linear}
+
+  /* Animated mesh glow behind hero */
+  .hero::after{content:"";position:absolute;inset:-25%;z-index:0;pointer-events:none;filter:blur(30px);
+    background:
+      radial-gradient(38% 38% at 18% 28%, rgba(16,181,174,.22), transparent 60%),
+      radial-gradient(36% 36% at 82% 18%, rgba(54,214,206,.18), transparent 60%),
+      radial-gradient(46% 46% at 62% 92%, rgba(255,107,87,.14), transparent 60%);
+    animation:meshmove 16s ease-in-out infinite alternate}
+  @keyframes meshmove{0%{transform:translate(0,0) scale(1)}50%{transform:translate(3%,-2.5%) scale(1.1)}100%{transform:translate(-3%,2%) scale(1.05)}}
+  .hero .wrap{position:relative;z-index:2}
+
+  /* Shimmer on gradient headline text */
+  .hero h1 .grad{background-size:220% auto;animation:shimmer 7s linear infinite}
+  @keyframes shimmer{to{background-position:220% center}}
+
+  /* Hero word rotator */
+  .rotator{display:inline-block;position:relative;vertical-align:bottom}
+  .rot-word{display:inline-block;background:linear-gradient(120deg,#fff,#cdeffb);-webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:rotIn .6s cubic-bezier(.2,.8,.2,1)}
+  .rot-word.out{animation:rotOut .45s ease forwards}
+  @keyframes rotIn{from{opacity:0;transform:translateY(18px) rotateX(-40deg)}to{opacity:1;transform:none}}
+  @keyframes rotOut{to{opacity:0;transform:translateY(-18px) rotateX(40deg)}}
+  .rot-caret{display:inline-block;width:3px;height:.95em;background:var(--cyan);margin-left:4px;border-radius:2px;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+
+  /* 3D tilt on service cards */
+  .svc{transform-style:preserve-3d;will-change:transform}
+  .svc .svc-ico,.svc h3,.svc-link,.svc .pill{transform:translateZ(28px)}
+
+  /* Scroll-down cue */
+  .scroll-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:7px;
+    color:rgba(233,242,251,.6);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase}
+  .scroll-cue .mouse{width:24px;height:38px;border:2px solid rgba(233,242,251,.45);border-radius:14px;position:relative}
+  .scroll-cue .mouse::after{content:"";position:absolute;top:7px;left:50%;transform:translateX(-50%);width:4px;height:7px;border-radius:3px;background:var(--cyan);animation:wheel 1.6s ease-in-out infinite}
+  @keyframes wheel{0%{opacity:0;transform:translate(-50%,0)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,12px)}}
+
+  @media(prefers-reduced-motion:reduce){
+    .hero::after,.hero h1 .grad,.rot-word,.rot-caret,.scroll-cue .mouse::after,.orb,.founder-photo .ring{animation:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+
+  /* RESPONSIVE */
+  @media(max-width:980px){
+    .hero-grid,.why-grid,.cta-grid,.founder-card{grid-template-columns:1fr}
+    .svc-grid,.steps,.testi-grid{grid-template-columns:1fr 1fr}
+    .foot-grid{grid-template-columns:1fr 1fr}
+    .founder-photo{min-height:280px}
+  }
+  @media(max-width:680px){
+    nav.links,.nav-cta .btn{display:none}
+    .menu-btn{display:flex}
+    .svc-grid,.steps,.testi-grid,.stat-grid,.form-row,.foot-grid{grid-template-columns:1fr}
+    .hero{padding:130px 0 80px}
+    section{padding:70px 0}
+    .hero-proof{gap:22px}
+    .mobile-menu.open{display:flex}
+  }
+  /* Mobile menu */
+  .mobile-menu{display:none;flex-direction:column;gap:6px;position:fixed;top:64px;left:14px;right:14px;z-index:99;
+    background:#fff;border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+  .mobile-menu a{padding:12px 14px;border-radius:10px;font-weight:600;color:var(--navy)}
+  .mobile-menu a:hover{background:var(--paper)}
+  .mobile-menu .btn{margin-top:6px;justify-content:center}
+</style>
+
+
+<div class="scroll-bar" id="scrollBar"></div>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="logo"><span class="logo-mark">S</span> Scimple <span class="sub">Education</span></a>
+    <nav class="links">
+      <a href="#services">Services</a>
+      <a href="#process">How It Works</a>
+      <a href="#why">Why Scimple</a>
+      <a href="#founder">About</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#contact" class="btn btn-primary">Let's talk →</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services">Services</a>
+  <a href="#process">How It Works</a>
+  <a href="#why">Why Scimple</a>
+  <a href="#founder">About</a>
+  <a href="#faq">FAQ</a>
+  <a href="#contact" class="btn btn-primary">Let's talk →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="grid-bg"></div>
+  <span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="hero-badge"><span class="pulse"></span> ACCME-Accredited Joint Providership</span>
+      <h1><span class="rotator"><span class="rot-word" id="rotWord">Joint accreditation</span><span class="rot-caret"></span></span><br><span class="grad">made Scimple.</span></h1>
+      <p class="lede">We carry the accreditation, the compliance, and the paperwork — so you can focus on the education. Credible, certified CME and everything around it, without building a department to run it.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary btn-lg">Let's talk →</a>
+        <a href="#services" class="btn btn-ghost btn-lg">Explore Services</a>
+      </div>
+      <div class="hero-proof">
+        <div class="pi"><b data-count="20" data-suffix="+">0</b><span>Years in medical education</span></div>
+        <div class="pi"><b data-count="12" data-suffix="">0</b><span>Specialized services</span></div>
+        <div class="pi"><b>100%</b><span>Compliance handled</span></div>
+      </div>
+    </div>
+    <div class="hero-card reveal">
+      <h3>Joint Providership Checklist</h3>
+      <p class="sub">Everything we handle for you, end to end:</p>
+      <div class="check-list">
+        <div class="ci"><span class="ico">✓</span> ACCME-compliant accreditation under our umbrella</div>
+        <div class="ci"><span class="ico">✓</span> Needs assessment, gap analysis & learning objectives</div>
+        <div class="ci"><span class="ico">✓</span> Disclosure review & mitigation of conflicts</div>
+        <div class="ci"><span class="ico">✓</span> Evaluation, outcomes reporting & certificates</div>
+        <div class="ci"><span class="ico">✓</span> Audit-ready documentation, start to finish</div>
+      </div>
+      <a href="#contact" class="btn btn-primary mini-cta">See if we're a fit</a>
+    </div>
+  </div>
+
+  <!-- CLIENT LOGO MARQUEE -->
+  <div class="wrap logo-strip reveal">
+    <div class="ls-label">Trusted by the organizations we've partnered with</div>
+    <div class="marquee">
+      <div class="marquee-track" id="logoTrack">
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-01.png" alt="JournalFeed"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-02.png" alt="AwakeAware"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-03.png" alt="Reanimate Conference"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-04.png" alt="SimKit"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-05.png" alt="AfriCRIT"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-06.png" alt="reSUB"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-07.png" alt="ResusEM"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-08.png" alt="Notable"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-09.png" alt="ResusX"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-10.png" alt="The Golden Hour"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-11.png" alt="ResusX ROSC"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-12.png" alt="LEAP"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-13.png" alt="COR"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-14.png" alt="Partner"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-15.png" alt="Partner"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-16.png" alt="RR"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-17.png" alt="Physician Contracts"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-18.png" alt="Partner"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-19.png" alt="BLOX"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-20.png" alt="TECHealth"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-21.png" alt="Partner"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-22.png" alt="Partner"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-23.png" alt="LocumOS"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-24.png" alt="life+limb"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-25.png" alt="Partner"></div>
+        <div class="client-logo"><img src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/logos/client-26.png" alt="Partner"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust">
+  <div class="wrap trust-inner">
+    <span class="trust-label">Trusted for credible continuing education</span>
+    <div class="trust-badges">
+      <div class="tbadge"><span class="dot">✚</span> ACCME Accredited</div>
+      <div class="tbadge"><span class="dot">⚕</span> CME / Joint Providership</div>
+      <div class="tbadge"><span class="dot">★</span> 20+ Years Expertise</div>
+      <div class="tbadge"><span class="dot">⚙</span> Full Compliance Support</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">What we do</span>
+      <h2>One partner for the whole education lifecycle</h2>
+      <p>From accreditation and LMS build-outs to production, marketing, and AI — everything you need to develop, deploy, and get your medical education seen.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc feature reveal d1">
+        <span class="pill">Most requested</span>
+        <div class="svc-ico">⚖️</div>
+        <h3>Joint Providership</h3>
+        <p class="svc-desc">Affordable, frictionless CME accreditation under our ACCME umbrella. We manage compliance and documentation so your program launches certified and audit-ready.</p>
+        <a href="#contact" class="svc-link">Start accreditation →</a>
+      </div>
+      <div class="svc reveal d2">
+        <div class="svc-ico">🖥️</div>
+        <h3>LMS Build-Outs</h3>
+        <p class="svc-desc">Complete learning platforms — built, branded, and hosted. We design your course delivery, custom landing pages, and the hosting behind it, all managed end to end.</p>
+        <a href="#contact" class="svc-link">Build my platform →</a>
+      </div>
+      <div class="svc reveal d3">
+        <div class="svc-ico">🎤</div>
+        <h3>Conference Organization</h3>
+        <p class="svc-desc">Full event planning from concept to execution — agenda design, speaker logistics, and seamless on-site or virtual delivery.</p>
+        <a href="#contact" class="svc-link">Plan an event →</a>
+      </div>
+      <div class="svc reveal d4">
+        <div class="svc-ico">📣</div>
+        <h3>Marketing &amp; Advertising</h3>
+        <p class="svc-desc">Done-for-you ad creative plus strategy and consultation on reaching the right learners. We help your education get found, filled, and remembered.</p>
+        <a href="#contact" class="svc-link">Grow enrollment →</a>
+      </div>
+      <div class="svc reveal d1">
+        <div class="svc-ico">📊</div>
+        <h3>Presentation Coaching</h3>
+        <p class="svc-desc">Slide design and delivery training that turns dense clinical content into clear, memorable, high-impact talks.</p>
+        <a href="#contact" class="svc-link">Level up your talk →</a>
+      </div>
+      <div class="svc reveal d2">
+        <div class="svc-ico">🎬</div>
+        <h3>Video &amp; Audio Production</h3>
+        <p class="svc-desc">Studio-quality multimedia content — from lecture capture to polished podcasts — that makes education engaging.</p>
+        <a href="#contact" class="svc-link">Produce content →</a>
+      </div>
+      <div class="svc reveal d3">
+        <div class="svc-ico">📱</div>
+        <h3>Social Media Coaching</h3>
+        <p class="svc-desc">Build your digital presence and community with proven strategies for reaching learners where they already are.</p>
+        <a href="#contact" class="svc-link">Grow your reach →</a>
+      </div>
+      <div class="svc reveal d4">
+        <div class="svc-ico">🤖</div>
+        <h3>Artificial Intelligence</h3>
+        <p class="svc-desc">Prompt engineering and ethical AI integration to modernize how your education is created, personalized, and scaled.</p>
+        <a href="#contact" class="svc-link">Integrate AI →</a>
+      </div>
+      <div class="svc reveal d1">
+        <div class="svc-ico">💰</div>
+        <h3>Grant &amp; Commercial Support</h3>
+        <p class="svc-desc">We source and manage compliant educational grants and industry funding — letters of agreement, fair-balance safeguards, and reconciliation handled for you.</p>
+        <a href="#contact" class="svc-link">Fund your activity →</a>
+      </div>
+      <div class="svc reveal d2">
+        <div class="svc-ico">📚</div>
+        <h3>Enduring Online Courses</h3>
+        <p class="svc-desc">On-demand, credit-bearing eLearning your audience can complete anytime — built, tracked, and certified, with content that stays accredited year-round.</p>
+        <a href="#contact" class="svc-link">Build a course →</a>
+      </div>
+      <div class="svc reveal d3">
+        <div class="svc-ico">📈</div>
+        <h3>Outcomes &amp; Analytics</h3>
+        <p class="svc-desc">Moore's-level outcomes measurement and clear dashboards that prove your education changed knowledge, competence, and practice — ready for funders and boards.</p>
+        <a href="#contact" class="svc-link">Measure impact →</a>
+      </div>
+      <div class="svc reveal d4">
+        <div class="svc-ico">🧑‍🏫</div>
+        <h3>Faculty Development</h3>
+        <p class="svc-desc">Speaker training and faculty development that builds confident, effective educators — turning subject-matter experts into teachers people remember.</p>
+        <a href="#contact" class="svc-link">Develop your faculty →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">How it works</span>
+      <h2>From idea to accredited CME in 3 steps</h2>
+      <p>A frictionless path designed to remove the paperwork between you and certified education.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal d1">
+        <div class="num">1</div>
+        <h3>A quick conversation</h3>
+        <p>Tell us about your activity. We talk through fit, scope, and requirements, then map exactly what's needed — no pressure, no cost.</p>
+      </div>
+      <div class="step reveal d2">
+        <div class="num">2</div>
+        <h3>We handle compliance</h3>
+        <p>Needs assessment, disclosures, conflict mitigation, learning objectives, and audit-ready documentation — all built and managed by us.</p>
+      </div>
+      <div class="step reveal d3">
+        <div class="num">3</div>
+        <h3>Launch & certify</h3>
+        <p>Your activity goes live under our accreditation. Learners earn credit; you get clean outcomes reporting and certificates.</p>
+      </div>
+    </div>
+    <div class="center" style="margin-top:42px">
+      <a href="#contact" class="btn btn-dark btn-lg">Start the conversation →</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY / STATS -->
+<section class="why" id="why">
+  <div class="grid-bg"></div>
+  <div class="wrap why-grid">
+    <div class="reveal">
+      <span class="eyebrow" style="color:var(--cyan)">Why Scimple</span>
+      <h2>Focus on the education.<br>We'll handle the rest.</h2>
+      <p class="lede">Traditional medical education hasn't kept pace with how people learn today. Scimple bridges that gap — pairing rigorous accreditation with modern production, coaching, and AI.</p>
+      <div class="why-list">
+        <div class="wi"><span class="ico">✓</span><div><b>No accreditation department required</b><span>Skip the overhead. We bring the ACCME standing and the process.</span></div></div>
+        <div class="wi"><span class="ico">✓</span><div><b>Frictionless & affordable</b><span>Transparent, partnership-first pricing built for educators, not bureaucracies.</span></div></div>
+        <div class="wi"><span class="ico">✓</span><div><b>Modern by default</b><span>Video, social, and ethical AI baked in — so your education actually gets seen.</span></div></div>
+        <div class="wi"><span class="ico">✓</span><div><b>Two decades of trust</b><span>Led by a practicing physician-educator who's done this at scale.</span></div></div>
+      </div>
+    </div>
+    <div class="stat-grid reveal d2">
+      <div class="stat"><b data-count="20" data-suffix="+">0</b><span>Years of medical education leadership</span></div>
+      <div class="stat"><b data-count="12" data-suffix="">0</b><span>Integrated services under one roof</span></div>
+      <div class="stat"><b>100%</b><span>Of compliance &amp; paperwork handled</span></div>
+      <div class="stat"><b data-count="1" data-suffix=" goal">0</b><span>Make your education simple</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section class="founder" id="founder">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">About Scimple</span>
+      <h2>Built by an educator, for educators</h2>
+    </div>
+    <div class="founder-card reveal">
+      <div class="founder-photo">
+        <img class="founder-img" src="https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@main/images/haney-mallemat.png" alt="Dr. Haney Mallemat speaking on stage" />
+      </div>
+      <div class="founder-body">
+        <span class="pill">Founder</span>
+        <h2>Dr. Haney Mallemat</h2>
+        <div class="role">Physician-Educator &amp; Founder of Scimple Education, LLC</div>
+        <p>With over two decades in medical education, Dr. Mallemat built Scimple on a simple conviction: educators should spend their energy teaching — not navigating accreditation paperwork.</p>
+        <p>Scimple combines the rigor of ACCME-accredited joint providership with the modern tools — production, coaching, and ethical AI — that make education engaging and discoverable.</p>
+        <div class="founder-quote">"Education should be properly developed, deployed, and seen. That's the whole point of making it Scimple."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi" id="testimonials">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">In their words</span>
+      <h2>Educators who stopped doing paperwork</h2>
+      <p>Real outcomes from partners who launched accredited education without the overhead.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="tcard reveal d1">
+        <div class="stars">★★★★★</div>
+        <p>"We'd been putting off launching CME for two years because the accreditation process felt impossible. Scimple had our first activity certified in weeks — we never touched a compliance form."</p>
+        <div class="tperson"><span class="av">SC</span><div><b>Dr. Sarah Chen</b><span>Program Director, Critical Care Symposium</span></div></div>
+      </div>
+      <div class="tcard reveal d2">
+        <div class="stars">★★★★★</div>
+        <p>"The production and presentation coaching transformed our sessions. Our talks went from dense slide decks to something people actually shared. Attendance and engagement both jumped."</p>
+        <div class="tperson"><span class="av">MT</span><div><b>Dr. Michael Torres</b><span>Director of Medical Education</span></div></div>
+      </div>
+      <div class="tcard reveal d3">
+        <div class="stars">★★★★★</div>
+        <p>"Frictionless is exactly right. Affordable, fast, and they treated us like a true partner — not a ticket number. We now run every activity through Scimple."</p>
+        <div class="tperson"><span class="av">PR</span><div><b>Dr. Priya Raman</b><span>CME Lead, Academic EM Department</span></div></div>
+      </div>
+    </div>
+    <!-- NOTE: illustrative testimonials — replace with real client quotes before launch -->
+    <p class="placeholder-note" id="testiNote">Illustrative examples — replace with real client quotes before launch.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Questions</span>
+      <h2>Joint accreditation, answered</h2>
+    </div>
+    <div class="faq-wrap">
+      <div class="qa reveal">
+        <div class="qa-q">What exactly is joint providership? <span class="plus">+</span></div>
+        <div class="qa-a"><div>Joint providership lets your organization offer accredited CME under Scimple's ACCME accreditation. You bring the educational content and expertise; we provide the accreditation standing and manage all compliance requirements.</div></div>
+      </div>
+      <div class="qa reveal">
+        <div class="qa-q">Do I need my own accreditation to work with you? <span class="plus">+</span></div>
+        <div class="qa-a"><div>No — that's the point. You don't need to build or maintain an accreditation department. We carry the accreditation so you can launch certified education immediately.</div></div>
+      </div>
+      <div class="qa reveal">
+        <div class="qa-q">What does Scimple handle vs. what do I provide? <span class="plus">+</span></div>
+        <div class="qa-a"><div>You provide the clinical content, faculty, and educational goals. We handle needs assessment, learning objectives, disclosure and conflict management, evaluation, outcomes reporting, certificates, and audit-ready documentation.</div></div>
+      </div>
+      <div class="qa reveal">
+        <div class="qa-q">Can you help beyond accreditation? <span class="plus">+</span></div>
+        <div class="qa-a"><div>Absolutely. Complete LMS build-outs (with landing pages and hosting), marketing and advertising, conference organization, enduring online courses, grant and commercial support, outcomes and analytics, faculty development, coaching, video/audio production, and ethical AI integration are all available — individually or as a full package.</div></div>
+      </div>
+      <div class="qa reveal">
+        <div class="qa-q">How much does it cost? <span class="plus">+</span></div>
+        <div class="qa-a"><div>Pricing is partnership-first and depends on your project's scope. Reach out for a quick conversation and we'll give you a clear, transparent quote — no obligation.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / FORM -->
+<section class="cta" id="contact">
+  <span class="orb c1"></span><span class="orb c2"></span>
+  <div class="wrap cta-grid">
+    <div class="reveal">
+      <span class="eyebrow" style="color:var(--cyan)">Let's talk</span>
+      <h2>Let's talk about your education</h2>
+      <p class="lede">Tell us what you're working on and we'll map the simplest path to accredited, engaging CME — whether that's accreditation, an LMS, production, or all of it.</p>
+      <div class="cta-list">
+        <div class="ci"><span class="ico">✓</span> A reply within one business day</div>
+        <div class="ci"><span class="ico">✓</span> Clear, transparent scope — no obligation</div>
+        <div class="ci"><span class="ico">✓</span> Guidance from a physician-educator</div>
+      </div>
+    </div>
+    <div class="form-card reveal d2">
+      <h3>Tell us about your project</h3>
+      <p class="fsub">A few details is all we need — we'll reply within one business day.</p>
+      <iframe
+        id="JotFormIFrame-251821445679061"
+        title="Scimple Education — Contact"
+        allowtransparency="true"
+        allow="geolocation; microphone; camera; fullscreen; payment"
+        src="https://form.jotform.com/251821445679061"
+        frameborder="0"
+        style="min-width:100%;max-width:100%;height:620px;border:none;border-radius:12px;"
+        scrolling="no">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#top" class="logo"><span class="logo-mark">S</span> Scimple <span class="sub">Education</span></a>
+        <p>Education Made 'Scimple.' ACCME-accredited joint providership and modern CME services — so educators can focus on teaching.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Services</h4>
+        <a href="#services">Joint Providership</a>
+        <a href="#services">LMS Build-Outs</a>
+        <a href="#services">Marketing &amp; Advertising</a>
+        <a href="#services">Conference Organization</a>
+        <a href="#services">Video, Audio &amp; AI</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="#founder">About Us</a>
+        <a href="#why">Why Scimple</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h4>Get started</h4>
+        <a href="#contact">Free readiness review</a>
+        <a href="https://form.jotform.com/251821445679061" target="_blank" rel="noopener">Contact form ↗</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Scimple Education, LLC. All rights reserved.</span>
+      <span>Education Made 'Scimple.'</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+// Duplicate logo set for seamless infinite marquee
+  (function(){
+    const track = document.getElementById('logoTrack');
+    if(track){ track.innerHTML += track.innerHTML; }
+  })();
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Sticky nav + scroll progress bar
+  const nav = document.getElementById('nav');
+  const bar = document.getElementById('scrollBar');
+  const onScroll = () => {
+    nav.classList.toggle('scrolled', window.scrollY > 30);
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+  };
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  // Hero word rotator
+  (function(){
+    const el = document.getElementById('rotWord');
+    if(!el || reduceMotion) return;
+    const words = ['Joint accreditation','LMS build-outs','Online courses','Conferences','Marketing','Production','Grant support','Outcomes','AI integration'];
+    let i = 0;
+    setInterval(() => {
+      el.classList.add('out');
+      setTimeout(() => {
+        i = (i + 1) % words.length;
+        el.textContent = words[i];
+        el.classList.remove('out');
+      }, 430);
+    }, 2600);
+  })();
+
+  if(!reduceMotion && window.matchMedia('(hover:hover)').matches){
+    // 3D tilt on service cards
+    document.querySelectorAll('.svc').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - .5;
+        const py = (e.clientY - r.top) / r.height - .5;
+        card.style.transform = `translateY(-8px) perspective(800px) rotateY(${px*7}deg) rotateX(${-py*7}deg)`;
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+
+    // Magnetic primary buttons
+    document.querySelectorAll('.btn-primary, .btn-dark').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        const mx = e.clientX - r.left - r.width/2;
+        const my = e.clientY - r.top - r.height/2;
+        btn.style.transform = `translate(${mx*0.25}px, ${my*0.35 - 3}px)`;
+      });
+      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    });
+
+    // Hero mouse parallax on the floating orbs
+    const hero = document.getElementById('top');
+    const orbs = hero ? hero.querySelectorAll('.orb') : [];
+    if(hero){
+      hero.addEventListener('mousemove', e => {
+        const r = hero.getBoundingClientRect();
+        const cx = (e.clientX - r.left) / r.width - .5;
+        const cy = (e.clientY - r.top) / r.height - .5;
+        orbs.forEach((o, i) => {
+          const depth = (i + 1) * 14;
+          o.style.transform = `translate(${cx*depth}px, ${cy*depth}px)`;
+        });
+      });
+      hero.addEventListener('mouseleave', () => { orbs.forEach(o => { o.style.transform = ''; }); });
+    }
+  }
+
+  // Mobile menu
+  const mb = document.getElementById('menuBtn'), mm = document.getElementById('mobileMenu');
+  mb.addEventListener('click', () => mm.classList.toggle('open'));
+  mm.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mm.classList.remove('open')));
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Animated counters
+  const counted = new WeakSet();
+  const animateCount = (el) => {
+    if(counted.has(el)) return; counted.add(el);
+    const target = +el.dataset.count, suffix = el.dataset.suffix || '';
+    let cur = 0; const steps = 40, inc = target / steps;
+    const tick = () => { cur += inc; if(cur < target){ el.textContent = Math.floor(cur) + suffix; requestAnimationFrame(tick); } else { el.textContent = target + suffix; } };
+    tick();
+  };
+  const co = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ animateCount(e.target); co.unobserve(e.target); } });
+  }, {threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(el => co.observe(el));
+
+  // FAQ accordion
+  document.querySelectorAll('.qa-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const qa = q.parentElement;
+      const a = qa.querySelector('.qa-a');
+      const isOpen = qa.classList.contains('open');
+      document.querySelectorAll('.qa').forEach(x => { x.classList.remove('open'); x.querySelector('.qa-a').style.maxHeight = null; });
+      if(!isOpen){ qa.classList.add('open'); a.style.maxHeight = a.scrollHeight + 'px'; }
+    });
+  });
+
+  // Jotform iframe auto-resize (fits the embed to its content, no inner scrollbar)
+  window.addEventListener('message', (e) => {
+    if(typeof e.data !== 'string' || e.data.indexOf('setHeight') !== 0) return;
+    const parts = e.data.split(':'); // setHeight:<px>:<formID>
+    const ifr = document.getElementById('JotFormIFrame-251821445679061');
+    if(ifr && parts[1]) ifr.style.height = parts[1] + 'px';
+  });
+</script>
