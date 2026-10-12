@@ -1,0 +1,544 @@
+<title>Course Library Storyboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout: a vertical film strip of six scenes; each scene pairs a scaled screen mock with its director's notes. */
+:root{
+  --void:#0B0B0D;      /* stage black */
+  --surface:#141418;
+  --raised:#1E1E24;
+  --line:#2A2A31;
+  --ember:#FF7A1A;     /* anything you click */
+  --ember-hi:#FF9447;
+  --tide:#18C5BB;      /* credit, progress, confirmation */
+  --bone:#F5F1EA;
+  --ash:#9A968F;
+  --display:'Big Shoulders Display','Oswald',Impact,'Arial Narrow',sans-serif;
+  --body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--void);color:var(--bone);font-family:var(--body);font-size:16px;line-height:1.55;padding-inline:16px;padding-block:0}
+.wrap{max-width:1260px;margin:0 auto}
+h1,h2,h3{text-wrap:balance;margin:0}
+
+/* ---------- page header ---------- */
+.top{padding-block:56px 40px;display:grid;gap:28px;border-bottom:1px solid var(--line)}
+.kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ash)}
+.kicker b{color:var(--ember);font-weight:500}
+h1{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(2.8rem,7vw,5.4rem);line-height:.86;letter-spacing:.005em}
+h1 span{color:var(--ember)}
+.intro{max-width:62ch;color:#d6d1c9;font-size:1.05rem;margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:12px 28px}
+.sw{display:flex;align-items:center;gap:12px;min-width:0}
+.chip{width:40px;height:40px;border-radius:8px;flex:none;border:1px solid var(--line)}
+.sw strong{display:block;font-size:.95rem}
+.sw small{display:block;color:var(--ash);font-size:.82rem;line-height:1.35}
+
+/* ---------- scenes ---------- */
+.frame{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(0,1fr);gap:24px 44px;align-items:center;padding-block:56px;border-bottom:1px solid var(--line)}
+@media (max-width:920px){.frame{grid-template-columns:minmax(0,1fr)}}
+.browser{background:var(--raised);border-radius:12px;overflow:hidden;box-shadow:0 30px 80px -30px #000,0 0 0 1px var(--line)}
+.chrome{display:flex;align-items:center;gap:7px;padding:9px 12px;background:#18181d}
+.chrome i{width:10px;height:10px;border-radius:50%;background:#3a3a42}
+.chrome span{margin-left:10px;font-family:var(--mono);font-size:.72rem;color:var(--ash);background:var(--void);padding:3px 12px;border-radius:6px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scroller{overflow-x:auto}
+.notes{min-width:0;display:grid;gap:14px}
+.scene{font-family:var(--mono);font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ember)}
+.notes h2{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:2.3rem;line-height:.95}
+.notes p{margin:0;color:#d6d1c9;max-width:52ch}
+.notes ul{margin:0;padding-left:1.1em;color:#d6d1c9;display:grid;gap:4px}
+.notes li::marker{color:var(--ash)}
+.build{border-left:2px solid var(--tide);padding:4px 0 4px 14px;font-size:.92rem;color:var(--bone)}
+.build b{display:block;font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tide);margin-bottom:2px}
+.build.warn{border-color:var(--ember)}
+.build.warn b{color:var(--ember)}
+
+/* ---------- the screen mock (everything inside scales with container width) ---------- */
+.screen{container-type:inline-size;position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--void);color:var(--bone);font-family:var(--body);min-width:560px;line-height:1.3}
+.tri{display:inline-block;width:.8em;height:.9em;background:currentColor;clip-path:polygon(0 0,100% 50%,0 100%)}
+
+/* generated poster art: a glow + two faint rings, tinted per course */
+.art{background:
+  radial-gradient(circle at var(--x,70%) var(--y,35%),transparent 0 17%,rgba(255,255,255,.13) 17.4% 18.1%,transparent 18.5% 25%,rgba(255,255,255,.06) 25.3% 25.9%,transparent 26.2%),
+  radial-gradient(115% 95% at 85% 12%,var(--a),transparent 62%),
+  linear-gradient(165deg,var(--b) 0%,#0b0b0d 82%)}
+.p-airway{--a:#ff7a1ad0;--b:#4a1600;--x:72%;--y:30%}
+.p-shock{--a:#18c5bbb8;--b:#06302e;--x:28%;--y:40%}
+.p-vent{--a:#7fe3d9a0;--b:#0f2a35;--x:80%;--y:72%}
+.p-pocus{--a:#ffb15cc8;--b:#3d2300;--x:60%;--y:58%}
+.p-sepsis{--a:#ff5a1fcc;--b:#3a0a06;--x:22%;--y:25%}
+.p-tox{--a:#18c5bb90;--b:#1a1030;--x:76%;--y:20%}
+.p-arrest{--a:#ff7a1aa0;--b:#202024;--x:40%;--y:72%}
+.p-ecmo{--a:#18c5bbcc;--b:#0b1d2b;--x:86%;--y:46%}
+
+.nav{position:absolute;inset:0 0 auto 0;z-index:4;display:flex;align-items:center;gap:3cqi;padding:1.6cqi 3cqi;background:linear-gradient(#0b0b0df0,transparent);font-size:1.1cqi}
+.wm{font-family:var(--display);font-weight:900;font-size:2.5cqi;letter-spacing:.03em;color:var(--ember);line-height:1}
+.wm b{color:var(--tide)}
+.links{display:flex;gap:1.8cqi;color:var(--ash)}
+.links .on{color:var(--bone);font-weight:600}
+.nav-r{margin-left:auto;display:flex;gap:1.8cqi;align-items:center}
+.srch{width:1.4cqi;height:1.4cqi;border:.2cqi solid var(--bone);border-radius:50%;position:relative}
+.srch::after{content:"";position:absolute;width:.7cqi;height:.2cqi;background:var(--bone);right:-.6cqi;bottom:-.3cqi;transform:rotate(45deg)}
+.avatar{width:2.2cqi;height:2.2cqi;border-radius:.4cqi;background:linear-gradient(135deg,var(--tide),#0d6f69)}
+
+.hero{position:relative;min-height:37cqi;display:flex;align-items:flex-end;padding:7.5cqi 3cqi 8.5cqi}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0b0b0dd8 0%,#0b0b0d70 40%,transparent 70%),linear-gradient(transparent 55%,var(--void) 98%)}
+.hero-copy{position:relative;z-index:1;max-width:40cqi}
+.eyebrow{display:flex;align-items:center;gap:.8cqi;font-size:.95cqi;letter-spacing:.32em;font-weight:600}
+.sb{font-family:var(--display);font-weight:900;color:var(--ember);font-size:1.7cqi;line-height:1;letter-spacing:0}
+.hero-title{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:5.8cqi;line-height:.86;margin:.9cqi 0 1.2cqi;letter-spacing:.005em}
+.meta{display:flex;flex-wrap:wrap;gap:.9cqi;align-items:center;font-size:1.1cqi;color:var(--ash)}
+.cme{color:var(--tide);border:.13cqi solid var(--tide);padding:.15cqi .6cqi;border-radius:.3cqi;font-weight:700;font-size:.92cqi;letter-spacing:.06em}
+.hero p{font-size:1.2cqi;line-height:1.45;color:#ddd8d0;margin:1cqi 0 1.6cqi;max-width:34cqi}
+.btns{display:flex;gap:1cqi}
+.b-play,.b-ghost{display:inline-flex;gap:.7cqi;align-items:center;font-weight:700;padding:.8cqi 2cqi;border-radius:.5cqi;font-size:1.25cqi}
+.b-play{background:var(--ember);color:#1a0900}
+.b-ghost{background:rgba(245,241,234,.17);color:var(--bone)}
+.i-circ{width:1.3cqi;height:1.3cqi;border:.18cqi solid currentColor;border-radius:50%;display:inline-grid;place-items:center;font-size:.85cqi;font-weight:800;font-style:normal}
+
+.rows{position:relative;z-index:2;margin-top:-7cqi;padding-left:3cqi;display:grid;gap:1.9cqi}
+.row-h{font-size:1.35cqi;font-weight:600;margin-bottom:.8cqi;display:flex;align-items:baseline;gap:1cqi}
+.row-h small{font-size:.95cqi;color:var(--tide);font-weight:500}
+.cards{display:flex;gap:.6cqi}
+.poster{flex:0 0 17cqi;aspect-ratio:16/9;border-radius:.45cqi;position:relative;overflow:hidden}
+.poster .pt{position:absolute;left:.9cqi;bottom:1.1cqi;right:.9cqi;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:1.95cqi;line-height:.88}
+.poster .sb{position:absolute;top:.6cqi;left:.8cqi;font-size:1.35cqi}
+.poster .new{position:absolute;top:.6cqi;right:.6cqi;background:var(--tide);color:#03201e;font-size:.75cqi;font-weight:700;letter-spacing:.08em;padding:.15cqi .5cqi;border-radius:.25cqi}
+.prog{position:absolute;left:0;right:0;bottom:0;height:.38cqi;background:rgba(255,255,255,.22)}
+.prog b{display:block;height:100%;background:var(--ember)}
+.t10{flex:0 0 auto;display:flex;align-items:flex-end}
+.num{font-family:var(--display);font-weight:900;font-size:13cqi;line-height:.74;color:var(--void);-webkit-text-stroke:.22cqi #66625d;margin-right:-1.4cqi;position:relative;z-index:0}
+.t10 .poster{flex:0 0 7.6cqi;aspect-ratio:2/3;z-index:1}
+.t10 .poster .pt{font-size:1.35cqi}
+.dim{opacity:.5}
+
+/* scene 2: hover pop */
+.pop{position:absolute;z-index:5;left:17.2cqi;top:20cqi;width:27cqi;border-radius:.7cqi;overflow:hidden;background:var(--surface);box-shadow:0 2cqi 5cqi #000c,0 0 0 .1cqi #ffffff14}
+.pop .poster{width:100%;border-radius:0}
+.pop .poster .pt{font-size:2.9cqi}
+.pop-body{padding:1.3cqi 1.4cqi 1.5cqi;display:grid;gap:1cqi}
+.ctrls{display:flex;gap:.7cqi;align-items:center}
+.rb{width:2.9cqi;height:2.9cqi;border-radius:50%;border:.16cqi solid #8a8680;display:grid;place-items:center;font-size:1.5cqi;font-weight:500;color:var(--bone)}
+.rb.go{background:var(--ember);border-color:var(--ember);color:#1a0900;font-size:1.1cqi}
+.rb.more{margin-left:auto}
+.chev{width:.9cqi;height:.9cqi;border-right:.18cqi solid currentColor;border-bottom:.18cqi solid currentColor;transform:translateY(-.25cqi) rotate(45deg)}
+.pop-meta{display:flex;flex-wrap:wrap;gap:.8cqi;align-items:center;font-size:1.05cqi;color:var(--ash)}
+.tags{font-size:1.05cqi;color:var(--bone)}
+.tags i{font-style:normal;color:#5c5a57;margin:0 .5cqi}
+.cursor{position:absolute;z-index:6;left:33cqi;top:31cqi;width:1.9cqi;height:2.7cqi;background:var(--bone);clip-path:polygon(0 0,0 85%,24% 66%,40% 100%,55% 94%,40% 61%,72% 61%);filter:drop-shadow(0 0 .2cqi #000)}
+.hint{position:absolute;z-index:6;left:45.5cqi;top:15cqi;font-family:var(--mono);font-size:.95cqi;color:var(--ember);display:flex;align-items:center;gap:.8cqi}
+.hint::before{content:"";width:3cqi;height:.12cqi;background:var(--ember)}
+
+/* scene 3: details modal */
+.backdrop{position:absolute;inset:0;filter:blur(1cqi) brightness(.35)}
+.modal{position:absolute;z-index:3;left:50%;transform:translateX(-50%);top:2.6cqi;width:64cqi;bottom:-2cqi;background:var(--surface);border-radius:.8cqi;overflow:hidden;box-shadow:0 2cqi 6cqi #000}
+.banner{position:relative;height:25cqi;display:flex;align-items:flex-end;padding:0 3cqi 2.4cqi}
+.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,var(--surface))}
+.banner > *{position:relative;z-index:1}
+.banner .hero-title{font-size:5cqi;margin:.6cqi 0 1.3cqi}
+.x{position:absolute;z-index:2;top:1.4cqi;right:1.4cqi;width:2.6cqi;height:2.6cqi;border-radius:50%;background:var(--void);display:grid;place-items:center;font-size:1.4cqi}
+.mbody{padding:.6cqi 3cqi 2cqi;display:grid;grid-template-columns:1.7fr 1fr;gap:1.4cqi 3cqi;font-size:1.12cqi}
+.mbody p{margin:.8cqi 0 0;line-height:1.5;color:#ddd8d0}
+.facts{display:grid;gap:.6cqi;color:var(--ash);align-content:start}
+.facts span{color:var(--bone)}
+.facts .credit{color:var(--tide)}
+.ep-h{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;margin-top:.8cqi}
+.ep-h h4{margin:0;font-size:1.7cqi;font-weight:700}
+.select{border:.13cqi solid #55524e;border-radius:.35cqi;padding:.5cqi 1.2cqi;font-size:1.05cqi;display:flex;gap:1cqi;align-items:center;background:var(--raised)}
+.eps{grid-column:1/-1;display:grid}
+.ep{display:grid;grid-template-columns:3cqi 13cqi 1fr;gap:1.6cqi;align-items:center;padding:1.3cqi 1.4cqi;border-top:.1cqi solid var(--line);border-radius:.4cqi}
+.ep.cur{background:var(--raised);border-top-color:transparent}
+.ep-n{font-family:var(--display);font-weight:800;font-size:2.6cqi;color:var(--ash);text-align:center}
+.ep .poster{flex:none;width:13cqi}
+.ep-t{display:flex;justify-content:space-between;gap:1cqi;font-weight:600;font-size:1.2cqi}
+.ep-t em{font-style:normal;color:var(--ash);font-weight:400}
+.ep-d{color:var(--ash);font-size:1.05cqi;margin-top:.4cqi;line-height:1.4}
+.done{color:var(--tide);font-size:.95cqi;font-weight:600;margin-top:.4cqi}
+
+/* scene 4: player */
+.video{position:absolute;inset:0;background:radial-gradient(80% 70% at 70% 40%,#2a1408,transparent 70%),#0e0e11}
+.slide{position:absolute;left:12cqi;top:9cqi;width:52cqi;padding:3cqi 3.6cqi;background:#f3efe8;color:#16161a;border-radius:.4cqi;box-shadow:0 2cqi 4cqi #0008}
+.slide h5{margin:0 0 1.6cqi;font-family:var(--display);font-weight:900;font-size:3.6cqi;line-height:.9;text-transform:uppercase}
+.slide h5 span{color:#d9620b}
+.slide ol{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:1cqi 2.4cqi;font-size:1.35cqi}
+.slide li b{display:inline-block;width:2.2cqi;font-family:var(--display);font-size:2cqi;color:#d9620b}
+.presenter{position:absolute;right:9cqi;bottom:10cqi;width:15cqi;height:24cqi;border-radius:7.5cqi 7.5cqi 1cqi 1cqi;background:linear-gradient(#2b2b31,#1a1a1f)}
+.presenter::before{content:"";position:absolute;left:50%;top:-8.5cqi;transform:translateX(-50%);width:7.5cqi;height:7.5cqi;border-radius:50%;background:#2b2b31}
+.ptop{position:absolute;z-index:2;inset:0 0 auto 0;padding:2cqi 3cqi;display:flex;align-items:center;gap:1.4cqi;font-size:1.2cqi;background:linear-gradient(#000a,transparent)}
+.back{width:1.3cqi;height:1.3cqi;border-left:.22cqi solid var(--bone);border-bottom:.22cqi solid var(--bone);transform:rotate(45deg)}
+.ptop small{color:var(--ash);font-size:1.05cqi}
+.toast{position:absolute;z-index:3;top:2cqi;right:3cqi;display:flex;align-items:center;gap:1cqi;background:#062624f0;border:.12cqi solid var(--tide);color:var(--bone);border-radius:.5cqi;padding:.9cqi 1.4cqi;font-size:1.1cqi}
+.tick{width:1.9cqi;height:1.9cqi;border-radius:50%;background:var(--tide);display:grid;place-items:center}
+.tick::after{content:"";width:.5cqi;height:.9cqi;border-right:.2cqi solid #03201e;border-bottom:.2cqi solid #03201e;transform:translateY(-.12cqi) rotate(45deg)}
+.toast b{color:var(--tide)}
+.upnext{position:absolute;z-index:3;right:3cqi;bottom:10.5cqi;width:27cqi;background:#141418f2;border-radius:.7cqi;overflow:hidden;box-shadow:0 1cqi 3cqi #000a}
+.upnext .poster{width:100%;border-radius:0;aspect-ratio:16/7}
+.un-body{padding:1.2cqi 1.4cqi 1.4cqi;display:grid;gap:.8cqi}
+.un-row{display:flex;align-items:center;gap:1.2cqi}
+.ring{width:3.6cqi;height:3.6cqi;border-radius:50%;background:conic-gradient(var(--ember) 0 72%,#ffffff26 72% 100%);display:grid;place-items:center;flex:none}
+.ring span{width:2.9cqi;height:2.9cqi;border-radius:50%;background:#141418;display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:1.8cqi}
+.un-row small{display:block;color:var(--ash);font-size:.95cqi;letter-spacing:.12em;text-transform:uppercase}
+.un-row strong{font-size:1.25cqi}
+.un-body .b-play{justify-content:center;padding:.7cqi;font-size:1.15cqi}
+.pbar{position:absolute;z-index:2;inset:auto 0 0 0;padding:0 3cqi 2cqi;background:linear-gradient(transparent,#000c 40%)}
+.scrub{position:relative;height:.45cqi;background:#ffffff33;border-radius:.3cqi;margin:4cqi 0 1.6cqi}
+.scrub b{position:absolute;inset:0 3% 0 0;background:var(--ember);border-radius:.3cqi}
+.scrub i{position:absolute;right:3%;top:50%;width:1.5cqi;height:1.5cqi;margin:-.75cqi -.75cqi 0 0;border-radius:50%;background:var(--ember)}
+.pctl{display:flex;align-items:center;gap:2.2cqi;font-size:1.15cqi}
+.pause{display:flex;gap:.35cqi}
+.pause i{width:.45cqi;height:1.7cqi;background:var(--bone)}
+.pctl .mid{margin:0 auto;font-weight:600}
+.pctl .mid em{font-style:normal;color:var(--ash);font-weight:400}
+.pctl .t{color:var(--ash);font-family:var(--mono);font-size:1cqi}
+
+/* scene 5: finale */
+.finale{position:absolute;inset:0;padding:6.5cqi 3cqi 0;background:radial-gradient(60% 50% at 75% 30%,#18c5bb22,transparent 70%),radial-gradient(50% 50% at 15% 20%,#ff7a1a1c,transparent 70%),var(--void)}
+.fgrid{display:grid;grid-template-columns:1.15fr 1fr;gap:2.4cqi}
+.card{background:var(--surface);border-radius:.8cqi;padding:2.2cqi 2.4cqi;border:.1cqi solid var(--line)}
+.q-top{display:flex;justify-content:space-between;align-items:center;font-size:1cqi;color:var(--ash);letter-spacing:.12em;text-transform:uppercase}
+.dots{display:flex;gap:.5cqi}
+.dots i{width:2.2cqi;height:.4cqi;border-radius:.2cqi;background:#ffffff22}
+.dots i.on{background:var(--tide)}
+.dots i.now{background:var(--ember)}
+.q{font-size:1.5cqi;font-weight:600;line-height:1.35;margin:1.6cqi 0 1.4cqi}
+.opts{display:grid;gap:.8cqi}
+.opt{display:flex;gap:1.1cqi;align-items:center;padding:1cqi 1.2cqi;border:.12cqi solid #3a3a42;border-radius:.45cqi;font-size:1.15cqi;color:#ddd8d0}
+.opt b{width:2cqi;height:2cqi;border-radius:50%;border:.12cqi solid #55524e;display:grid;place-items:center;font-size:.95cqi;flex:none}
+.opt.sel{border-color:var(--ember);background:#ff7a1a14;color:var(--bone)}
+.opt.sel b{background:var(--ember);border-color:var(--ember);color:#1a0900}
+.card > .b-play{margin-top:1.6cqi}
+.cert{text-align:center;display:grid;justify-items:center;gap:1cqi;border-color:#18c5bb55;background:linear-gradient(#18c5bb10,transparent 60%),var(--surface)}
+.seal{width:7cqi;height:7cqi;border-radius:50%;border:.3cqi solid var(--tide);display:grid;place-items:center;box-shadow:0 0 0 .8cqi #18c5bb1a}
+.seal::after{content:"";width:1.6cqi;height:3cqi;border-right:.45cqi solid var(--tide);border-bottom:.45cqi solid var(--tide);transform:translateY(-.4cqi) rotate(45deg)}
+.cert small{font-size:1cqi;letter-spacing:.3em;text-transform:uppercase;color:var(--tide);font-weight:600}
+.cert h6{margin:0;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:3.6cqi;line-height:.9}
+.cert p{margin:0;font-size:1.15cqi;color:var(--ash);line-height:1.45}
+.cert p strong{color:var(--tide)}
+.cert .btns{margin-top:.6cqi}
+.frow{margin-top:2.4cqi}
+
+/* scene 6: phone */
+.phone-stage{display:grid;place-items:center;padding:28px 12px;background:radial-gradient(60% 60% at 50% 40%,#ff7a1a14,transparent 70%)}
+.phone{width:min(290px,100%);aspect-ratio:9/19;border-radius:40px;border:9px solid #1f1f25;background:var(--void);overflow:hidden;box-shadow:0 30px 70px -20px #000,0 0 0 1px #34343c}
+.m{container-type:inline-size;position:relative;height:100%;overflow:hidden;font-family:var(--body);color:var(--bone);line-height:1.3}
+.m-status{display:flex;justify-content:space-between;padding:3.5cqi 7cqi 1cqi;font-size:4.4cqi;font-weight:600}
+.m-status i{width:7cqi;height:3.4cqi;border:.5cqi solid var(--bone);border-radius:1cqi;position:relative}
+.m-status i::after{content:"";position:absolute;inset:.5cqi 1.6cqi .5cqi .5cqi;background:var(--bone);border-radius:.4cqi}
+.m-head{display:flex;align-items:center;gap:4cqi;padding:2cqi 5cqi}
+.m-head .wm{font-size:8cqi}
+.m-head .srch{margin-left:auto;width:4.6cqi;height:4.6cqi;border-width:.7cqi}
+.m-head .srch::after{width:2.4cqi;height:.7cqi;right:-2cqi;bottom:-1cqi}
+.m-head .avatar{width:6.4cqi;height:6.4cqi;border-radius:1.2cqi}
+.m-chips{display:flex;gap:2.4cqi;padding:1.5cqi 5cqi 3cqi}
+.m-chips span{border:.35cqi solid #55524e;border-radius:10cqi;padding:1.1cqi 3.4cqi;font-size:3.6cqi;white-space:nowrap}
+.m-hero{margin:0 5cqi;aspect-ratio:4/5;border-radius:3cqi;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;text-align:center;padding:0 5cqi 5cqi;box-shadow:0 0 0 .3cqi #ffffff14}
+.m-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 35%,#0b0b0de0 85%)}
+.m-hero > *{position:relative;z-index:1}
+.m-hero .sb{font-size:5cqi}
+.m-hero h3{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:13cqi;line-height:.85;margin:1.5cqi 0 2.4cqi}
+.m-tags{font-size:3.4cqi;color:#ddd8d0;margin-bottom:3.4cqi}
+.m-tags i{font-style:normal;color:var(--ember);margin:0 1.2cqi}
+.m-btns{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqi;width:100%}
+.m-btns span{display:flex;justify-content:center;align-items:center;gap:1.8cqi;border-radius:1.6cqi;padding:2.4cqi;font-size:4cqi;font-weight:700}
+.m-btns .p{background:var(--ember);color:#1a0900}
+.m-btns .g{background:#ffffff26}
+.m-row{padding:4.5cqi 0 0 5cqi}
+.m-row h4{margin:0 0 2.4cqi;font-size:4.6cqi;font-weight:700}
+.m-cards{display:flex;gap:2.2cqi}
+.m-cards .poster{flex:0 0 27cqi;aspect-ratio:2/3;border-radius:1.6cqi}
+.m-cards .poster .pt{font-size:5cqi;left:2.4cqi;right:2.4cqi;bottom:3cqi}
+.m-cards .poster .sb{font-size:4.2cqi;top:1.8cqi;left:2.2cqi}
+.m-cards .prog{height:1.1cqi}
+.m-tabs{position:absolute;inset:auto 0 0 0;display:grid;grid-template-columns:repeat(4,1fr);padding:3cqi 2cqi 6cqi;background:#0b0b0df5;border-top:.3cqi solid var(--line)}
+.m-tabs span{display:grid;justify-items:center;gap:1.4cqi;font-size:3.2cqi;color:var(--ash)}
+.m-tabs span i{width:5.4cqi;height:5.4cqi;border:.6cqi solid currentColor;border-radius:1.4cqi}
+.m-tabs span:nth-child(2) i{border-radius:50%}
+.m-tabs span:nth-child(3) i{border-radius:.6cqi;border-width:.6cqi .6cqi 2cqi}
+.m-tabs span:nth-child(4) i{border-radius:50%;border-color:var(--tide)}
+.m-tabs .on{color:var(--ember)}
+.m-tabs .on i{background:var(--ember)}
+
+/* ---------- closing ---------- */
+.decide{padding-block:56px 72px;display:grid;gap:24px}
+.decide h2{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(2rem,4vw,3rem);line-height:.9}
+.dlist{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px}
+.d{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;display:grid;gap:6px;align-content:start;min-width:0}
+.d strong{font-size:1.05rem}
+.d span{color:var(--ash);font-size:.94rem}
+.foot{font-family:var(--mono);font-size:.74rem;color:var(--ash);letter-spacing:.06em}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="kicker">Storyboard <b>/</b> Draft 1 <b>/</b> Scimple course template</div>
+    <h1>Course Library,<br><span>streaming</span> style</h1>
+    <p class="intro">Six scenes from a learner's first session: browsing the library, previewing a course, watching an episode, and earning credit. Course titles, artwork, faculty details and credit numbers are placeholders.</p>
+    <div class="legend">
+      <div class="sw"><span class="chip" style="background:var(--void)"></span><div><strong>Black</strong><small>The stage. Nearly every pixel.</small></div></div>
+      <div class="sw"><span class="chip" style="background:var(--ember)"></span><div><strong>Orange</strong><small>Anything you click, plus progress.</small></div></div>
+      <div class="sw"><span class="chip" style="background:var(--tide)"></span><div><strong>Teal</strong><small>CME credit, completion, confirmations.</small></div></div>
+    </div>
+  </header>
+
+  <!-- Scene 1 -->
+  <section class="frame" id="browse">
+    <div class="browser">
+      <div class="chrome"><i></i><i></i><i></i><span>yourdomain.com/library</span></div>
+      <div class="scroller"><div class="screen">
+        <div class="nav"><span class="wm">SCIMPLE<b>+</b></span><span class="links"><span class="on">Home</span><span>Courses</span><span>My List</span><span>CME Credits</span></span><span class="nav-r"><span class="srch"></span><span class="avatar"></span></span></div>
+        <div class="hero art p-airway">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="sb">S</span>ORIGINAL SERIES</div>
+            <h3 class="hero-title">The Crashing Airway</h3>
+            <div class="meta"><span class="cme">4.0 CME</span>6 episodes · 2026 · Airway &amp; Resuscitation</div>
+            <p>Intubating the patient who is already circling the drain. Six short episodes on getting the physiology right before, during and after the tube.</p>
+            <div class="btns"><span class="b-play"><span class="tri"></span>Play</span><span class="b-ghost"><i class="i-circ">i</i>More Info</span></div>
+          </div>
+        </div>
+        <div class="rows">
+          <div><div class="row-h">Continue Watching for Haney</div><div class="cards" data-row="shock:62,vent:30,pocus:85,sepsis:12,ecmo:45"></div></div>
+          <div><div class="row-h">Top 10 in Critical Care This Week</div><div class="cards" data-top="sepsis,airway,shock,vent,pocus,tox"></div></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="notes">
+      <div class="scene">Scene 1 · Browse</div>
+      <h2>Arrive and browse</h2>
+      <p>The learner signs in and lands here. The featured course fills the top of the screen with a muted 30-second trailer, and rows of courses scroll sideways underneath.</p>
+      <ul>
+        <li>Rows: Continue Watching, Top 10 This Week, New This Month, then one row per specialty.</li>
+        <li>Orange marks Play, progress bars and the active menu item. Teal is used only for the CME credit tag.</li>
+      </ul>
+      <div class="build"><b>GHL build</b>A custom HTML page on a GHL site, behind member login. Each tile links to its course in GHL Memberships.</div>
+    </div>
+  </section>
+
+  <!-- Scene 2 -->
+  <section class="frame" id="preview">
+    <div class="browser">
+      <div class="chrome"><i></i><i></i><i></i><span>yourdomain.com/library</span></div>
+      <div class="scroller"><div class="screen">
+        <div class="nav"><span class="wm">SCIMPLE<b>+</b></span><span class="links"><span>Home</span><span class="on">Courses</span><span>My List</span><span>CME Credits</span></span><span class="nav-r"><span class="srch"></span><span class="avatar"></span></span></div>
+        <div class="hero art p-ecmo dim" style="min-height:22cqi;padding:0"></div>
+        <div class="rows" style="margin-top:-2cqi">
+          <div><div class="row-h">New This Month <small>3 new episodes</small></div><div class="cards" data-row="tox:0,shock:0,arrest:0,ecmo:0,vent:0" data-dim="1"></div></div>
+          <div><div class="row-h">Hemodynamics</div><div class="cards" data-row="sepsis:0,pocus:0,arrest:0,shock:0,airway:0" data-dim="1"></div></div>
+        </div>
+        <div class="pop">
+          <div class="poster art p-shock"><span class="sb">S</span><span class="new">NEW EPISODES</span><span class="pt">Shock, Decoded</span></div>
+          <div class="pop-body">
+            <div class="ctrls"><span class="rb go"><span class="tri"></span></span><span class="rb">+</span><span class="rb more"><span class="chev"></span></span></div>
+            <div class="pop-meta"><span class="cme">2.0 CME</span>4 episodes · 1h 40m · CC</div>
+            <div class="tags">Hemodynamics<i>•</i>Case-based<i>•</i>Bedside</div>
+          </div>
+        </div>
+        <span class="cursor"></span>
+        <span class="hint">0.4s hover · 5s clip plays</span>
+      </div></div>
+    </div>
+    <div class="notes">
+      <div class="scene">Scene 2 · Preview</div>
+      <h2>Preview on hover</h2>
+      <p>When the pointer rests on a tile for about half a second, the tile grows and plays a short silent clip. Quick actions sit right on the card: play, add to My List, and open the details.</p>
+      <ul>
+        <li>The teal tag shows how much credit the course carries before anyone clicks.</li>
+        <li>A "New episodes" flag appears when a course gets fresh lessons.</li>
+      </ul>
+      <div class="build"><b>On phones</b>There is no hover on a phone. Tapping a tile goes straight to the details panel in scene 3.</div>
+    </div>
+  </section>
+
+  <!-- Scene 3 -->
+  <section class="frame" id="details">
+    <div class="browser">
+      <div class="chrome"><i></i><i></i><i></i><span>yourdomain.com/library#crashing-airway</span></div>
+      <div class="scroller"><div class="screen">
+        <div class="backdrop art p-airway"></div>
+        <div class="modal">
+          <div class="banner art p-airway">
+            <div>
+              <div class="eyebrow"><span class="sb">S</span>ORIGINAL SERIES</div>
+              <h3 class="hero-title">The Crashing Airway</h3>
+              <div class="btns"><span class="b-play"><span class="tri"></span>Resume E2</span><span class="rb">+</span></div>
+            </div>
+          </div>
+          <span class="x">×</span>
+          <div class="mbody">
+            <div>
+              <div class="meta"><span class="cme">4.0 CME</span>6 episodes · 1h 32m · 2026</div>
+              <p>Most airway courses teach the tube. This one teaches the patient attached to it: how to spot the arrest waiting to happen, buy time with oxygen and pressure, and pick a plan B before you need it.</p>
+            </div>
+            <div class="facts">
+              <div>Faculty: <span>Haney Mallemat</span></div>
+              <div>Credit: <span class="credit">4.0 AMA PRA Category 1 Credits™</span></div>
+              <div>Available until: <span>Dec 31, 2027</span></div>
+            </div>
+            <div class="ep-h"><h4>Episodes</h4><span class="select">Module 1: Preparation <span class="chev"></span></span></div>
+            <div class="eps">
+              <div class="ep"><span class="ep-n">1</span><div class="poster art p-airway" style="--x:30%;--y:60%"><span class="prog"><b style="width:100%"></b></span></div><div><div class="ep-t">Before You Touch the Patient<em>14m</em></div><div class="ep-d">Pressure, oxygen and pH: what to fix before induction.</div><div class="done">✓ Watched · 0.5 CME logged</div></div></div>
+              <div class="ep cur"><span class="ep-n" style="color:var(--bone)">2</span><div class="poster art p-sepsis" style="--x:70%;--y:30%"><span class="prog"><b style="width:60%"></b></span></div><div><div class="ep-t">The Shock Index Doesn't Lie<em>18m</em></div><div class="ep-d">Reading the numbers that predict peri-intubation arrest.</div></div></div>
+              <div class="ep"><span class="ep-n">3</span><div class="poster art p-shock" style="--x:50%;--y:50%"></div><div><div class="ep-t">Apneic Oxygenation, Done Right<em>12m</em></div><div class="ep-d">Nasal cannula, NIV and the minutes they buy you.</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="notes">
+      <div class="scene">Scene 3 · Details</div>
+      <h2>Course details</h2>
+      <p>"More Info" opens a panel with the synopsis, faculty, the credit statement and the episode list. Lessons are grouped into modules the way a show groups episodes into seasons.</p>
+      <ul>
+        <li>The main button changes to "Resume E2" once the learner has started.</li>
+        <li>Finished episodes show a teal check and the credit they logged.</li>
+      </ul>
+      <div class="build warn"><b>Heads up</b>A page that lives outside GHL's course area can't see each learner's progress. Progress bars and the Continue Watching row need either GHL's own course pages (scene 4) or an automation that syncs progress. I'd launch without per-learner progress on the library page and add it later.</div>
+    </div>
+  </section>
+
+  <!-- Scene 4 -->
+  <section class="frame" id="watch">
+    <div class="browser">
+      <div class="chrome"><i></i><i></i><i></i><span>yourdomain.com/courses/crashing-airway/e3</span></div>
+      <div class="scroller"><div class="screen">
+        <div class="video">
+          <div class="slide">
+            <h5>Before the tube: <span>SOAP-ME</span></h5>
+            <ol>
+              <li><b>S</b>Suction, two of them</li>
+              <li><b>O</b>Oxygen: NC + mask/NIV</li>
+              <li><b>A</b>Airway kit + plan B</li>
+              <li><b>P</b>Position: ear to sternal notch</li>
+              <li><b>M</b>Monitors, meds, pressors</li>
+              <li><b>E</b>End-tidal CO₂ ready</li>
+            </ol>
+          </div>
+          <div class="presenter"></div>
+        </div>
+        <div class="ptop"><span class="back"></span>The Crashing Airway <small>· E3 of 6</small></div>
+        <div class="toast"><span class="tick"></span><span>Episode 3 complete · <b>0.5 CME logged</b></span></div>
+        <div class="upnext">
+          <div class="poster art p-arrest"><span class="sb">S</span><span class="pt">Plan B: The Failed First Pass</span></div>
+          <div class="un-body">
+            <div class="un-row"><span class="ring"><span>5</span></span><div><small>Next episode</small><strong>E4 · Plan B: The Failed First Pass</strong></div></div>
+            <span class="b-play"><span class="tri"></span>Play now</span>
+          </div>
+        </div>
+        <div class="pbar">
+          <div class="scrub"><b></b><i></i></div>
+          <div class="pctl"><span class="pause"><i></i><i></i></span><span>-10s</span><span>+10s</span><span class="t">11:38 / 12:00</span><span class="mid">E3 <em>Apneic Oxygenation, Done Right</em></span><span>Episodes</span><span>CC</span><span>1.25×</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="notes">
+      <div class="scene">Scene 4 · Watch</div>
+      <h2>Watch an episode</h2>
+      <p>The lesson plays full width. As it ends, a teal note confirms the credit was logged and the next episode counts down from 5 before it starts on its own.</p>
+      <ul>
+        <li>Orange scrub bar and Play buttons, so the next action is always the brightest thing on screen.</li>
+        <li>Speed control and captions stay one click away.</li>
+      </ul>
+      <div class="build"><b>GHL build</b>This is GHL's own lesson page, restyled with custom CSS, so GHL keeps tracking completion. The countdown needs custom JavaScript. If the portal won't run it, a matching "Next episode" button takes its place.</div>
+    </div>
+  </section>
+
+  <!-- Scene 5 -->
+  <section class="frame" id="finale">
+    <div class="browser">
+      <div class="chrome"><i></i><i></i><i></i><span>yourdomain.com/courses/crashing-airway/post-test</span></div>
+      <div class="scroller"><div class="screen">
+        <div class="nav"><span class="wm">SCIMPLE<b>+</b></span><span class="links"><span>Home</span><span class="on">Courses</span><span>My List</span><span>CME Credits</span></span><span class="nav-r"><span class="srch"></span><span class="avatar"></span></span></div>
+        <div class="finale">
+          <div class="fgrid">
+            <div class="card">
+              <div class="q-top"><span>Post-test · Question 4 of 5</span><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="now"></i><i></i></span></div>
+              <div class="q">A patient with a shock index of 1.3 needs intubation. Which plan best limits post-intubation hypotension?</div>
+              <div class="opts">
+                <div class="opt"><b>A</b>Standard-dose propofol, fluids if the pressure drops</div>
+                <div class="opt sel"><b>B</b>Reduced-dose induction with a pressor running first</div>
+                <div class="opt"><b>C</b>Delay vasopressors until after the tube is placed</div>
+                <div class="opt"><b>D</b>Skip pre-oxygenation to shorten time to tube</div>
+              </div>
+              <span class="b-play">Submit answer</span>
+            </div>
+            <div class="card cert">
+              <span class="seal"></span>
+              <small>Season complete</small>
+              <h6>The Crashing Airway</h6>
+              <p>You earned <strong>4.0 AMA PRA Category 1 Credits™</strong>.<br>Certificate issued Oct 11, 2026.</p>
+              <div class="btns"><span class="b-play">Download certificate</span><span class="b-ghost">Add to transcript</span></div>
+            </div>
+          </div>
+          <div class="frow"><div class="row-h">Because you finished The Crashing Airway</div><div class="cards" data-row="arrest:0,shock:0,vent:0,ecmo:0,tox:0"></div></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="notes">
+      <div class="scene">Scene 5 · Finale</div>
+      <h2>Season finale</h2>
+      <p>Finishing the last episode unlocks the post-test. Passing it issues the certificate on the spot and suggests what to watch next, so the learner flows into the next course.</p>
+      <ul>
+        <li>The post-test progress uses teal for answered questions and orange for the current one.</li>
+        <li>The certificate card is the one place teal takes over the screen.</li>
+      </ul>
+      <div class="build"><b>GHL build</b>Uses GHL's built-in quizzes and certificates, styled to match.</div>
+    </div>
+  </section>
+
+  <!-- Scene 6 -->
+  <section class="frame" id="mobile">
+    <div class="phone-stage">
+      <div class="phone"><div class="m">
+        <div class="m-status"><span>9:41</span><i></i></div>
+        <div class="m-head"><span class="wm">SCIMPLE<b>+</b></span><span class="srch"></span><span class="avatar"></span></div>
+        <div class="m-chips"><span>Courses</span><span>CME Credits</span><span>Specialties</span></div>
+        <div class="m-hero art p-sepsis">
+          <span class="sb">S</span>
+          <h3>Sepsis: The First Hour</h3>
+          <div class="m-tags">Shock<i>•</i>Antibiotics<i>•</i>Fluids</div>
+          <div class="m-btns"><span class="p"><span class="tri"></span>Play</span><span class="g">+ My List</span></div>
+        </div>
+        <div class="m-row"><h4>Continue Watching</h4><div class="m-cards" data-row="shock:62,vent:30,pocus:85,airway:20"></div></div>
+        <div class="m-tabs"><span class="on"><i></i>Home</span><span><i></i>Search</span><span><i></i>My List</span><span><i></i>Credits</span></div>
+      </div></div>
+    </div>
+    <div class="notes">
+      <div class="scene">Scene 6 · Phone</div>
+      <h2>On a phone</h2>
+      <p>The same library, stacked for a small screen: one featured course, rows that swipe sideways, and a tab bar for Home, Search, My List and Credits.</p>
+      <ul>
+        <li>The featured poster turns portrait so the title stays big.</li>
+        <li>The Credits tab shows the learner's running CME total.</li>
+      </ul>
+      <div class="build"><b>GHL build</b>This layout shows in a phone's web browser. Learners who use GHL's mobile app will see the app's own layout instead.</div>
+    </div>
+  </section>
+
+  <section class="decide">
+    <h2>Three calls before I build</h2>
+    <div class="dlist">
+      <div class="d"><strong>The platform name</strong><span>"Scimple+" is a stand-in. Pick a name, or I can propose a few.</span></div>
+      <div class="d"><strong>Progress on the library page</strong><span>Launch without per-learner progress, or set up an automation that syncs it from GHL.</span></div>
+      <div class="d"><strong>Real courses and artwork</strong><span>Send course titles, modules and thumbnails. Otherwise I'll keep the generated poster art shown here.</span></div>
+    </div>
+    <div class="foot">All titles, faculty details, credit amounts and dates are sample content.</div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var T={airway:'The Crashing Airway',shock:'Shock, Decoded',vent:'Vent Mastery',pocus:'POCUS in Ten',sepsis:'Sepsis: The First Hour',tox:'Tox After Dark',arrest:'Peri-Arrest',ecmo:'ECMO for Everyone'};
+  function poster(k,p){
+    return '<div class="poster art p-'+k+'"><span class="sb">S</span><span class="pt">'+T[k]+'</span>'+(p>0?'<span class="prog"><b style="width:'+p+'%"></b></span>':'')+'</div>';
+  }
+  document.querySelectorAll('[data-row]').forEach(function(el){
+    el.innerHTML=el.getAttribute('data-row').split(',').map(function(s){var a=s.split(':');return poster(a[0],+a[1]);}).join('');
+    if(el.hasAttribute('data-dim'))el.classList.add('dim');
+  });
+  document.querySelectorAll('[data-top]').forEach(function(el){
+    el.innerHTML=el.getAttribute('data-top').split(',').map(function(k,i){return '<div class="t10"><span class="num">'+(i+1)+'</span>'+poster(k,0)+'</div>';}).join('');
+  });
+})();
+</script>
