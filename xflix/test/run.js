@@ -154,7 +154,8 @@ async function session(browser, o) {
   });
 
   const cfg = Object.assign({ waitForAuthMs: 1500, fonts: !!o.fonts, cacheMs: 30000 }, o.config || {});
-  await page.addInitScript({ content: 'window.XFLIX_CONFIG = ' + JSON.stringify(cfg) + ';\n' + SRC });
+  const head = o.rawConfig ? o.rawConfig : 'window.XFLIX_CONFIG = ' + JSON.stringify(cfg) + ';';
+  await page.addInitScript({ content: head + '\n' + SRC });
   return { ctx, page, requests, hosts, consoleMsgs };
 }
 
@@ -262,6 +263,20 @@ async function shot(page, name, full) {
     await p.locator('.xf-select').selectOption('c25');
     await p.waitForFunction(() => !/Day 3/.test(document.querySelector('#xflix-root').innerText));
     check('unsafe claim link (javascript:) is ignored', (await p.locator('#xflix-root a.xf-btn.teal').count()) === 0);
+    await s.ctx.close();
+  }
+
+  console.log('T16 the shipped example settings file works as written');
+  {
+    const raw = fs.readFileSync(path.join(__dirname, '..', 'config.example.js'), 'utf8');
+    const s = await session(browser, { rawConfig: raw });
+    const p = s.page;
+    await p.goto('https://portal.test/courses');
+    await p.waitForSelector('#xflix-root .xf-title-tile');
+    await p.locator('#xflix-root .xf-title-tile', { hasText: 'ResusX' }).first().click();
+    await p.waitForFunction(() => document.querySelectorAll('#xflix-root .xf-row').length >= 4);
+    check('example settings: folder Claim CME link works', (await p.locator('#xflix-root .xf-row', { hasText: 'Day 1' }).locator('a.xf-btn.teal').getAttribute('href')) === 'https://example.com/claim-resusx-2026-day-1');
+    check('example settings: course-level Claim CME link works', (await p.locator('.xf-hero a.xf-btn.teal').getAttribute('href')) === 'https://example.com/claim-resusx-2026');
     await s.ctx.close();
   }
 

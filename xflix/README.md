@@ -1,5 +1,27 @@
 # XFlix
 
+Netflix-style course library for GoHighLevel courses (ResusX and others). It runs inside GHL's Client Portal:
+GHL still hosts and plays the videos and records completion; XFlix is the new look and home page.
+
+| File | What it is |
+|---|---|
+| `xflix.js` | The XFlix program (read-only, no secrets). Served from this public repo by jsDelivr at a fixed release. |
+| `loader.js` | Small snippet for GHL's Custom JavaScript box. Loads one pinned release of `xflix.js`. |
+| `config.example.js` | Settings block (Claim CME links, banner images, saved catalog). Lives in GHL. |
+| `INSTALL.md` | How to install, switch off, update and roll back. How the fallbacks work. |
+| `THEME_SETTINGS.md` | Colors and fonts to enter in GHL's course theme so GHL's own pages match. |
+| `TEST_PLAN.md` | Step-by-step checks for the test sub-account. |
+| `probe.js`, `probe2.js` | The two feasibility probes (opt-in, read-only). |
+| `TEAM_INSTRUCTIONS.md`, `RUN_PROBE_PROMPT.md` | Instructions used to run probe 1. |
+| `test/run.js` | 50 automated checks against a mock portal (`NODE_PATH=$(npm root -g) node xflix/test/run.js`). |
+
+Status: XFlix 1.0.0 is built and passes the mock-portal tests. It has NOT yet been run against the real portal. That needs the
+probe 2 result and `TEST_PLAN.md`.
+
+---
+
+# XFlix
+
 Netflix-style skin for GoHighLevel courses (ResusX and other Scimple products).
 
 ## Step 1: feasibility probe (`probe.js`)
