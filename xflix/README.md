@@ -56,3 +56,8 @@ Same setup as step 1, with `?xflixprobe=2` on the portal address.
 It only sends read-only (GET) requests to the portal's own data service, as the logged-in test learner.
 The login header stays in memory and is never shown or copied. The report lists header names only.
 Remove the script from Custom JavaScript afterwards.
+
+Probe 2 also tallies the `visibility` value of every folder and lecture it sees (`summary.visibilityValues`),
+so we can tell whether draft folders are returned to a learner. With Melvin's setup (ResusX:2025 has
+11 folders, 3 of them draft) the report should show either 8 published folders (drafts hidden) or 11
+with a mix of values (drafts returned, so XFlix must filter them out).

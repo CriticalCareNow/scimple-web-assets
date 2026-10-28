@@ -159,6 +159,11 @@
     });
   }
 
+  function countVisibility(kind, value) {
+    var v = value === undefined || value === null ? 'none' : String(value).slice(0, 24);
+    summary.visibilityValues[kind][v] = (summary.visibilityValues[kind][v] || 0) + 1;
+  }
+
   function run() {
     if (running) return Promise.resolve();
     if (!headers || !base || !loc) {
@@ -168,7 +173,7 @@
     }
     running = true;
     results = [];
-    summary = { courses: 0, modules: 0, lessonsSeen: 0, lessonsStarted: 0, lessonsWithDuration: 0, completedListLength: null };
+    summary = { courses: 0, modules: 0, lessonsSeen: 0, lessonsStarted: 0, lessonsWithDuration: 0, completedListLength: null, visibilityValues: { modules: {}, lessons: {} } };
     var L = '/courses/learners/locations/' + loc;
     refresh();
 
@@ -181,6 +186,7 @@
           return get(L + '/courses/' + c.id + '/modules').then(function (mods) {
             var list = (mods && mods.modules) || [];
             summary.modules += list.length;
+            list.forEach(function (m) { countVisibility('modules', m.visibility); });
             var inner = Promise.resolve();
             list.slice(0, 3).forEach(function (m) {
               inner = inner.then(function () {
@@ -188,6 +194,7 @@
                   var lessons = (res && res.lessons) || [];
                   summary.lessonsSeen += lessons.length;
                   lessons.forEach(function (x) {
+                    countVisibility('lessons', x.visibility);
                     if (x.started) summary.lessonsStarted += 1;
                     if (x.asset_urls && x.asset_urls.meta && x.asset_urls.meta.durationInSeconds) summary.lessonsWithDuration += 1;
                   });
