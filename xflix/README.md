@@ -22,3 +22,37 @@ names, list sizes and page paths only. It does not record values, tokens or cook
 does not send anything anywhere.
 
 When finished, remove the script from the Custom JavaScript box.
+
+## Step 1 result (probe 1, run by Melvin, Oct 26 2026)
+
+The Client Portal loads everything XFlix needs from `services.leadconnectorhq.com/clientportal-middleware`:
+
+| Need | Endpoint (relative) | Seen in report |
+|---|---|---|
+| Courses the learner owns | `courses/learners/locations/{loc}/courses/library` | list of courses: id, title, posterImage, accessDate, courseStarted, libraryOrder |
+| Folders in a course | `.../courses/{id}/modules` | id, title, sequenceNo, visibility, dripDays, lessonsCount |
+| Lectures in a folder | `.../courses/{id}/modules/{moduleId}/lessons` | title, description, posterImage, `started`, `asset_urls.meta.durationInSeconds`, `asset_urls.thumbnailUrl` |
+| Locked folders | `.../courses/{id}/unlocked-modules` | `categoryUnlockedMap[id].isUnlocked` |
+| Completion | `.../courses/{id}/lessons/completed` | `completedLessons` (empty in this capture, item shape unknown) |
+| Resume point | `.../courses/{id}/lessons/sequence` | `lastLessonId` |
+| Course progress | `memberships/.../products/user-activity/{userId}` | totalPosts, completedPosts, progress |
+| Upsell / other courses | `courses/library/upsell`, `courses/library/discover` | endpoints exist, shapes not captured |
+
+Not yet known: whether our own script can call these endpoints, the shape of a completed-lesson item,
+whether draft folders are hidden from learners, and the second product's data (the probe hit its
+120-call cap). Probe 2 tests the first three. The probe 1 report contains internal IDs and is not
+committed to this repo.
+
+## Step 2: replay test (`probe2.js`)
+
+Same setup as step 1, with `?xflixprobe=2` on the portal address.
+
+1. Paste `probe2.js` into Custom JavaScript (replace probe 1 if it is still there). Save, clear cache.
+2. Log in as the test learner in a private window with `?xflixprobe=2` on the address.
+3. Open the course list, then a course. Open a lecture and **mark it complete**.
+4. Click the orange **XFlix probe 2** button, then **Run replay test**, wait for it to finish, then
+   **Copy report** and send it back.
+
+It only sends read-only (GET) requests to the portal's own data service, as the logged-in test learner.
+The login header stays in memory and is never shown or copied. The report lists header names only.
+Remove the script from Custom JavaScript afterwards.
