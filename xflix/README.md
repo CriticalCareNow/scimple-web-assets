@@ -94,7 +94,7 @@ x-product-id, x-app-build, x-cp-core-version, x-platform-details, Accept; no coo
 - Library: 2 courses. Folders: 15 returned (13 `published`, 2 `locked`). Lectures: 51 seen, 30 with a video duration.
 - Draft folders are NOT returned to learners (ResusX:2025 has 11 in admin, the learner sees 8).
 - Completed list items look like `{ id, postId, percentage }`. XFlix reads `postId` (it matches the lecture id). Unknown:
-  whether `percentage` can be below 100 for a lecture that was only partly watched. `TEST_PLAN.md` B8 checks this.
+  whether `percentage` can be below 100 for a lecture that was only partly watched. `TEST_PLAN.md` B7b checks this.
 - The "mark as finished" button reads "Mark as Complete" and changes to "Completed".
 - `courses/library/upsell` and `courses/library/discover` return `{ items: [], total, page, limit }` (empty in the test
   account), so a "Get access" row can be built later, but its item shape is still unknown.
