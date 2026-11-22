@@ -1,4 +1,4 @@
-/*! XFlix 1.0.0
+/*! XFlix 1.0.1
  * Netflix-style course browsing for the GoHighLevel Client Portal.
  *
  * What it does
@@ -22,7 +22,7 @@
   'use strict';
   if (window.__xflix) return;
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.0.1';
 
   var DEFAULTS = {
     enabled: true,
@@ -657,7 +657,7 @@
       '.xf-row-meta{font-size:13px;color:var(--xf-muted)}' +
       '.xf-row-h .xf-btn.teal{margin-left:auto}' +
       '.xf-scroller{position:relative}' +
-      '.xf-track{display:flex;gap:10px;overflow-x:auto;padding:10px clamp(16px,4vw,48px) 14px 12px;margin:-6px 0 0 -12px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#3a3a42 transparent}' +
+      '.xf-track{display:flex;gap:10px;overflow-x:auto;padding:10px clamp(16px,4vw,48px) 14px 12px;margin:-6px 0 0 -12px;scroll-padding-left:12px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#3a3a42 transparent}' +
       '.xf-arrow{position:absolute;top:0;bottom:56px;width:48px;z-index:5;border:0;background:linear-gradient(90deg,#0b0b0dee,transparent);color:#fff;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center}' +
       '.xf-arrow.r{right:0;background:linear-gradient(270deg,#0b0b0dee,transparent)}.xf-arrow.l{left:-1px}' +
       '.xf-scroller:hover .xf-arrow{opacity:1}.xf-arrow[hidden]{display:none}.xf-arrow .xf-ico{width:28px;height:28px;display:inline-flex}' +

@@ -99,3 +99,14 @@ x-product-id, x-app-build, x-cp-core-version, x-platform-details, Accept; no coo
 - `courses/library/upsell` and `courses/library/discover` return `{ items: [], total, page, limit }` (empty in the test
   account), so a "Get access" row can be built later, but its item shape is still unknown.
 - Report calls took 270 to 1300 ms each.
+
+## Mockup (`mockup/`)
+
+`mockup/` builds an interactive mockup: the real `xflix.js` running against a fake GHL data service with sample ResusX
+content. It uses real ResusX thumbnails from the team's skills folder and generated title-card thumbnails and banners.
+The built page (`xflix-mockup.html`, about 0.9 MB) is NOT committed because it embeds real faculty thumbnails and this repo
+is public. To rebuild: `python3 mockup/make_assets.py <dir>`, `node mockup/make_thumbs.js <dir>`, `python3 mockup/build.py <dir> <out.html>`.
+
+## Changes
+
+- 1.0.1: first tile in a row no longer jumps left when a row is wider than the screen, and no stray left arrow (new test T17).

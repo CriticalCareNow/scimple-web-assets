@@ -390,6 +390,23 @@ async function shot(page, name, full) {
     await s.ctx.close();
   }
 
+  console.log('T17 rows wider than the screen: first tile is not nudged and no stray left arrow');
+  {
+    const s = await session(browser, { viewport: { width: 800, height: 900 } });
+    const p = s.page;
+    await p.goto('https://portal.test/courses');
+    await p.waitForSelector('#xflix-root .xf-title-tile');
+    await p.locator('#xflix-root .xf-title-tile', { hasText: 'ResusX' }).first().click();
+    await p.waitForFunction(() => document.querySelectorAll('#xflix-root .xf-row').length >= 4);
+    await p.waitForTimeout(500);
+    const day1 = p.locator('#xflix-root .xf-row', { hasText: 'Day 1' });
+    const m = await day1.evaluate((row) => { const tr = row.querySelector('.xf-track'); const t = row.querySelector('.xf-tile'); return { overflow: tr.scrollWidth > tr.clientWidth + 4, scrollLeft: Math.round(tr.scrollLeft), gap: Math.round(t.getBoundingClientRect().left - tr.getBoundingClientRect().left) }; });
+    check('test row really overflows', m.overflow, m);
+    check('first tile keeps its left margin (scrollLeft stays 0)', m.scrollLeft <= 1 && m.gap >= 10, m);
+    check('no left scroll arrow at the start of a row', (await day1.locator('.xf-arrow.l').evaluate((a) => getComputedStyle(a).display)) === 'none');
+    await s.ctx.close();
+  }
+
   console.log('T14 catalog export helper');
   {
     const s = await session(browser);

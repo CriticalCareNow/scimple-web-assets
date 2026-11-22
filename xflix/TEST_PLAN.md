@@ -1,7 +1,11 @@
 # XFlix test plan (test sub-account only)
 
 Run this AFTER `probe2.js` has passed. Use the same test sub-account and learner as the probes
-(products `ResusX:2026` and `ResusX:2025`, learner `melvin@simplcme.com`).
+(products `ResusX:2026` and `ResusX:2025`, offer "XFlix Test").
+The old test learner (`melvin@simplcme.com`) can no longer be used because that mailbox is gone. Before you start, create a new test
+learner with an email address the tester can read (for example `cylah+xflixtest@simplcme.com`), give that contact access to both
+products through the same offer, and mark one lecture complete in each product so there is progress to see. Remove the old test
+learner from the test sub-account.
 
 Rules: test account only; follow the steps in order; if something does not match "You should see", stop and send a
 screenshot of what you see. Do not improvise.
