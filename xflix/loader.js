@@ -8,7 +8,7 @@
  * empty the Custom JavaScript box (GHL's normal pages return straight away).
  */
 (function () {
-  var RELEASE = '24215c15f9b65c01ea262ce6224523b0ce26bb3d'; // XFlix 1.0.1
+  var RELEASE = 'd2b1e7ce6dde5fcc0ac71142fbfc9398ba796f79'; // XFlix 1.1.0
   var s = document.createElement('script');
   s.src = 'https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@' + RELEASE + '/xflix/xflix.js';
   s.async = true;
