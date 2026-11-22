@@ -19,6 +19,9 @@ window.XFLIX_CONFIG = {
     }
   },
 
+  // Optional iPhone "Add to Home Screen" setup (icon: a 180x180 PNG on a public https address).
+  // homeScreen: { title: 'XFlix', icon: 'https://example.com/xflix-icon-180.png' },
+
   // Optional wide banner image per title (use the title name without the year) or per exact course title.
   heroImages: {
     // 'ResusX': 'https://example.com/resusx-banner.jpg'

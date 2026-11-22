@@ -58,6 +58,18 @@ On a phone (or the browser's phone view), open the Courses page.
 | D1 | Scroll the page | No sideways scrolling of the whole page. Rows scroll sideways by swiping. |
 | D2 | Tap a lecture | GHL's lesson page opens. |
 
+### D+. iPhone (use a real iPhone in Safari, not only the browser's phone view)
+
+| # | Do this | You should see |
+|---|---|---|
+| D3 | Open the Courses page, then turn the phone sideways and back | The banner text is not cut off. Nothing hides under the notch or the rounded corners. |
+| D4 | Look at the top bar and the buttons (Back, Resume, Claim CME, season picker) | Each is easy to hit with a thumb. Nothing needs two tries. |
+| D5 | Tap the season picker | The list opens and the page does NOT zoom in. |
+| D6 | Tap and release a lecture tile | It opens GHL's lesson. The tile does not stay "enlarged" after you come back. |
+| D7 | Scroll to the very bottom of a long course | The last row clears the home bar at the bottom of the screen. |
+| D8 | Open a lecture and play it full screen, then close it | The video plays; closing returns to the lesson page. (This is GHL's player, not XFlix. Report problems anyway.) |
+| D9 | Safari Share button > Add to Home Screen. Open it from the Home Screen | It opens without the Safari address bar. Sign-in still works. If the icon or name looks wrong, tell me (this needs the `homeScreen` setting). |
+
 ## E. Report back
 
 Send me one email with: the result (pass / fail) for each row above, a screenshot of B1, B4 and B6 (and D1 on a phone),

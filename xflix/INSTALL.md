@@ -70,6 +70,7 @@ The catalog lists course, folder and lecture names, IDs and picture links. It ha
 | `colors` | Override `accent`, `accent2`, `bg`, `surface`, `raised`, `line`, `text`, `muted` | black, orange, teal |
 | `fonts` | Load the XFlix fonts from Google Fonts | `true` |
 | `waitForAuthMs` | How long to wait for the portal's login before falling back | `8000` |
+| `homeScreen` | iPhone "Add to Home Screen" setup: `{ title: 'XFlix', icon: 'https://.../icon-180.png' }` (icon is a 180x180 PNG on a public https address). Adds only tags the portal lacks. Leave out to add nothing | none |
 | `enabled` | Set `false` to switch XFlix off in settings | `true` |
 
 ## Naming courses so seasons group

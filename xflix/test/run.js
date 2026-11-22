@@ -84,7 +84,7 @@ function world(kind) {
   };
 }
 
-const PORTAL_HTML = `<!doctype html><html><head><meta charset="utf-8"><title>Mock portal</title></head><body style="font-family:sans-serif">
+const PORTAL_HTML = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mock portal</title></head><body style="font-family:sans-serif">
 <h1 id="portal-ui">PORTAL UI <span id="p"></span></h1><a id="x" href="/courses">courses</a>
 <script>
 document.getElementById('p').textContent = location.pathname;
@@ -111,7 +111,7 @@ function check(name, cond, extra) {
 async function session(browser, o) {
   o = o || {};
   const w = o.world || world('multi');
-  const ctx = await browser.newContext({ viewport: o.viewport || { width: 1400, height: 900 } });
+  const ctx = await browser.newContext(Object.assign({ viewport: o.viewport || { width: 1400, height: 900 } }, o.ctxOpts || {}));
   const page = await ctx.newPage();
   const requests = [];
   const hosts = new Set();
@@ -405,6 +405,60 @@ async function shot(page, name, full) {
     check('first tile keeps its left margin (scrollLeft stays 0)', m.scrollLeft <= 1 && m.gap >= 10, m);
     check('no left scroll arrow at the start of a row', (await day1.locator('.xf-arrow.l').evaluate((a) => getComputedStyle(a).display)) === 'none');
     await s.ctx.close();
+  }
+
+  console.log('T18 iPhone: tap targets, no hover tricks, safe-area gutters, landscape, Home Screen tags');
+  {
+    const s = await session(browser, { viewport: { width: 390, height: 844 }, ctxOpts: { isMobile: true, hasTouch: true, deviceScaleFactor: 3 }, config: { homeScreen: { title: 'XFlix', icon: 'https://img.test/1.svg' } } });
+    const p = s.page;
+    await p.goto('https://portal.test/courses');
+    await p.waitForSelector('#xflix-root .xf-title-tile');
+    await p.locator('#xflix-root .xf-title-tile', { hasText: 'ResusX' }).first().click();
+    await p.waitForFunction(() => document.querySelectorAll('#xflix-root .xf-row').length >= 4);
+    const m = await p.evaluate(() => {
+      const h = (sel) => Array.from(document.querySelectorAll('#xflix-root ' + sel)).map((e) => Math.round(e.getBoundingClientRect().height));
+      const r = document.getElementById('xflix-root');
+      const css = window.__xflixSheet ? Array.from(window.__xflixSheet.cssRules).map((x) => x.cssText).join('\n') : (document.getElementById('xflix-style') || {}).textContent || '';
+      return {
+        coarse: matchMedia('(pointer:coarse)').matches, hoverNone: matchMedia('(hover:none)').matches,
+        back: h('.xf-back'), nav: h('.xf-nav a, .xf-nav button'), btn: h('.xf-hero .xf-btn'), select: h('.xf-select'),
+        selFont: Array.from(document.querySelectorAll('#xflix-root .xf-select')).map((e) => parseFloat(getComputedStyle(e).fontSize)),
+        arrow: Array.from(document.querySelectorAll('#xflix-root .xf-arrow')).map((e) => getComputedStyle(e).display),
+        sw: r.scrollWidth, cw: r.clientWidth,
+        safe: /safe-area-inset-left/.test(css) && /safe-area-inset-right/.test(css) && /safe-area-inset-bottom/.test(css),
+        dvh: /dvh/.test(css),
+        viewport: document.querySelector('meta[name=viewport]').content,
+        meta: ['apple-mobile-web-app-capable', 'apple-mobile-web-app-status-bar-style', 'apple-mobile-web-app-title', 'theme-color'].map((n) => { const e = document.querySelector('meta[name="' + n + '"]'); return e ? e.content : null; }),
+        icon: (document.querySelector('link[rel="apple-touch-icon"]') || {}).href || ''
+      };
+    });
+    check('emulated phone is touch (coarse pointer, no hover)', m.coarse && m.hoverNone, m);
+    check('back link, nav, buttons and season picker are at least 44px tall', [].concat(m.back, m.nav, m.btn, m.select).length > 0 && [].concat(m.back, m.nav, m.btn, m.select).every((x) => x >= 44), m);
+    check('season picker text is 16px or bigger (stops iPhone zoom on tap)', m.selFont.length > 0 && m.selFont.every((x) => x >= 16), m.selFont);
+    check('hover-only row arrows are hidden on touch', m.arrow.length > 0 && m.arrow.every((d) => d === 'none'), m.arrow);
+    check('no sideways scroll on the phone', m.sw <= m.cw + 1, m);
+    check('style uses safe-area insets and dynamic viewport heights', m.safe && m.dvh, m);
+    check('Home Screen tags added when asked', m.meta[0] === 'yes' && m.meta[1] === 'black' && m.meta[2] === 'XFlix' && /^#/.test(m.meta[3] || '') && /img\.test/.test(m.icon), m);
+    check('portal viewport tag left alone', m.viewport === 'width=device-width, initial-scale=1', m.viewport);
+    await s.ctx.close();
+
+    const l = await session(browser, { viewport: { width: 844, height: 390 }, ctxOpts: { isMobile: true, hasTouch: true, deviceScaleFactor: 3 } });
+    const lp = l.page;
+    await lp.goto('https://portal.test/courses');
+    await lp.waitForSelector('#xflix-root .xf-title-tile');
+    await lp.locator('#xflix-root .xf-title-tile', { hasText: 'ResusX' }).first().click();
+    await lp.waitForFunction(() => document.querySelectorAll('#xflix-root .xf-row').length >= 4);
+    const lm = await lp.evaluate(() => {
+      const hero = document.querySelector('#xflix-root .xf-hero').getBoundingClientRect();
+      const copy = document.querySelector('#xflix-root .xf-hero-copy').getBoundingClientRect();
+      const r = document.getElementById('xflix-root');
+      return { heroBottom: Math.round(hero.bottom), copyBottom: Math.round(copy.bottom), sw: r.scrollWidth, cw: r.clientWidth, noHs: !document.querySelector('meta[name="apple-mobile-web-app-capable"]') };
+    });
+    check('landscape phone: banner text is not clipped', lm.copyBottom <= lm.heroBottom + 1, lm);
+    check('landscape phone: no sideways scroll', lm.sw <= lm.cw + 1, lm);
+    check('no Home Screen tags unless asked', lm.noHs, lm);
+    if (SHOTS) { await shot(lp, 'xflix-iphone-landscape.png'); }
+    await l.ctx.close();
   }
 
   console.log('T14 catalog export helper');
