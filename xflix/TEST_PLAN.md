@@ -27,6 +27,7 @@ Open a private window and go to the portal address. Log in as the learner (the c
 | B5 | Count the folder rows | Draft folders are NOT shown. Compare with the number the learner saw in probe 2. |
 | B6 | Find the locked folder ("Claiming Your CME") | Its lectures are dimmed with a lock and the text "This folder is locked...". They cannot be clicked. |
 | B7 | Find the lecture you marked complete in probe 2 | It shows a teal check and the word **Watched**. |
+| B7b | Play a different lecture for about 10 seconds WITHOUT marking it complete, then return to the XFlix course page (refresh if needed) | That lecture shows **In progress** (or no badge), NOT **Watched**. If it shows Watched, tell me. |
 | B8 | Open the season picker and pick **Season 2025** | The folders change to 2025's folders. |
 | B9 | Click a lecture that is not locked | GHL's normal lesson page opens and the video plays. |
 | B10 | On that lesson, press GHL's mark-complete button, then use the browser Back button to return to the course list | The XFlix page returns and, within about 30 seconds (or after a refresh), that lecture shows **Watched** and the progress line goes up by 1. |

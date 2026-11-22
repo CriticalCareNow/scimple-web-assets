@@ -15,8 +15,9 @@ GHL still hosts and plays the videos and records completion; XFlix is the new lo
 | `TEAM_INSTRUCTIONS.md`, `RUN_PROBE_PROMPT.md` | Instructions used to run probe 1. |
 | `test/run.js` | 50 automated checks against a mock portal (`NODE_PATH=$(npm root -g) node xflix/test/run.js`). |
 
-Status: XFlix 1.0.0 is built and passes the mock-portal tests. It has NOT yet been run against the real portal. That needs the
-probe 2 result and `TEST_PLAN.md`.
+Status (Nov 22 2026): XFlix 1.0.0 is built and passes the mock-portal tests. Probe 2 passed on the real portal (see
+"Step 2 result" below), so the script CAN request the data itself. XFlix has NOT yet been installed in the test
+sub-account. Next: install it there and run `TEST_PLAN.md`.
 
 ---
 
@@ -83,3 +84,18 @@ Probe 2 also tallies the `visibility` value of every folder and lecture it sees 
 so we can tell whether draft folders are returned to a learner. With Melvin's setup (ResusX:2025 has
 11 folders, 3 of them draft) the report should show either 8 published folders (drafts hidden) or 11
 with a mix of values (drafts returned, so XFlix must filter them out).
+
+## Step 2 result (probe 2, run by Melvin, Oct 29 2026)
+
+All 17 read-only requests returned 200. Our script can request the learner's data itself, by replaying the headers
+the portal already sends (header names seen: authorization, channel, source, version, x-location-id,
+x-product-id, x-app-build, x-cp-core-version, x-platform-details, Accept; no cookies needed).
+
+- Library: 2 courses. Folders: 15 returned (13 `published`, 2 `locked`). Lectures: 51 seen, 30 with a video duration.
+- Draft folders are NOT returned to learners (ResusX:2025 has 11 in admin, the learner sees 8).
+- Completed list items look like `{ id, postId, percentage }`. XFlix reads `postId` (it matches the lecture id). Unknown:
+  whether `percentage` can be below 100 for a lecture that was only partly watched. `TEST_PLAN.md` B8 checks this.
+- The "mark as finished" button reads "Mark as Complete" and changes to "Completed".
+- `courses/library/upsell` and `courses/library/discover` return `{ items: [], total, page, limit }` (empty in the test
+  account), so a "Get access" row can be built later, but its item shape is still unknown.
+- Report calls took 270 to 1300 ms each.
