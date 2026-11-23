@@ -65,7 +65,7 @@ The catalog lists course, folder and lecture names, IDs and picture links. It ha
 | `heroImages` | Banner pictures by title name or course title | course poster |
 | `catalog` | Saved catalog (level 2 fallback) | none |
 | `homeRoutes` | Portal pages XFlix replaces | `['/courses']` |
-| `seasonPattern` | How a course title is split into title and season | `Name:2026`, `Name 2026`, `Name - 2026` |
+| `seasonPattern` | How a course title is split into title and season. The default accepts `Name:2026`, `Name 2026`, `Name - 2026`. `config.example.js` ships a wider one that also accepts `Name:2026 (Enduring)` and `Name (2026)` | see left |
 | `hideStatusPattern` | Folder or lecture status words that hide an item | `draft, hidden, unpublish, private, archiv` |
 | `colors` | Override `accent`, `accent2`, `bg`, `surface`, `raised`, `line`, `text`, `muted` | black, orange, teal |
 | `fonts` | Load the XFlix fonts from Google Fonts | `true` |

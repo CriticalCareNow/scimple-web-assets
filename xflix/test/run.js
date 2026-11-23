@@ -503,6 +503,40 @@ async function shot(page, name, full) {
     }
   }
 
+  console.log('T20 real ResusNation-style titles group with the example seasonPattern');
+  {
+    const vm = require('vm');
+    const sandbox = { window: {} };
+    vm.runInNewContext(fs.readFileSync(path.join(__dirname, '..', 'config.example.js'), 'utf8'), sandbox);
+    const pattern = sandbox.window.XFLIX_CONFIG.seasonPattern;
+    check('config.example.js sets a seasonPattern', typeof pattern === 'string' && pattern.length > 10, pattern);
+    const mk = () => {
+      const w = world('multi');
+      w.library[0].title = 'ResusX:2026 (Enduring)';
+      w.library[1].title = 'ResusX:2025 (Enduring)';
+      w.library[2].title = 'ResusX:2026 (Enduring) - No CME';
+      return w;
+    };
+    const names = async (config) => {
+      const s = await session(browser, { world: mk(), config });
+      const p = s.page;
+      await p.goto('https://portal.test/courses');
+      await p.waitForSelector('#xflix-root .xf-title-tile');
+      const n = await p.locator('#xflix-root .xf-title-tile .xf-name').allTextContents();
+      const sub = await p.locator('#xflix-root .xf-title-tile').allTextContents();
+      await s.ctx.close();
+      return { n: n.map((x) => x.trim()), sub: sub.join(' | ') };
+    };
+    const before = await names({});
+    const after = await names({ seasonPattern: pattern });
+    check('default pattern leaves them as 3 separate tiles', before.n.length === 3, before);
+    check('example pattern: ResusX 2026 and 2025 become one title with 2 seasons', after.n.length === 2 && /2 seasons/.test(after.sub), after);
+    const re = new RegExp(pattern);
+    const cases = { 'Keynotable (2025)': ['Keynotable', '2025'], 'ResusX 2019': ['ResusX', '2019'], 'ResusX - 2024': ['ResusX', '2024'], 'ResusX:2026': ['ResusX', '2026'], 'ResusX:Mini (2025)': ['ResusX:Mini', '2025'] };
+    Object.keys(cases).forEach((t) => { const m = re.exec(t); check('"' + t + '" splits into ' + cases[t].join(' + '), !!m && m[1] === cases[t][0] && m[2] === cases[t][1], m && [m[1], m[2]]); });
+    ['ResusX:2026 — 3 Free Videos', 'ResusX:Rounds', 'EMX 2026 Virtual', 'ResusX:2026 (Enduring) - No CME'].forEach((t) => check('"' + t + '" has no season', !re.exec(t)));
+  }
+
   console.log('T14 catalog export helper');
   {
     const s = await session(browser);

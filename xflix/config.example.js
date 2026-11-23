@@ -7,6 +7,11 @@
 window.XFLIX_CONFIG = {
   brandName: 'XFlix',
 
+  // How a course title is split into a title and a season (year). This wider version also accepts
+  // "ResusX:2026 (Enduring)", "Keynotable (2025)", "ResusX 2019" and "ResusX - 2024".
+  // A title like "ResusX:2026 (Enduring) - No CME" has no season and stays its own tile.
+  seasonPattern: '^(.*?)\\s*[:\\-\\u2013\\u2014]?\\s*\\(?((?:19|20)\\d{2})\\)?(?:\\s*\\((?:Enduring|Replay)\\))?\\s*$',
+
   // Optional logo image (PNG or SVG with a transparent background). Without it XFlix shows a text logo.
   // logoUrl: 'https://cdn.jsdelivr.net/gh/CriticalCareNow/scimple-web-assets@RELEASE/xflix/assets/xflix-logo.png',
 
