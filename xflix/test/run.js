@@ -461,6 +461,48 @@ async function shot(page, name, full) {
     await l.ctx.close();
   }
 
+  console.log('T19 desktop and tablet sizes');
+  {
+    const SIZES = [
+      { n: 'laptop 1280x720', w: 1280, h: 720, touch: false }, { n: 'desktop 1440x900', w: 1440, h: 900, touch: false },
+      { n: 'full HD 1920x1080', w: 1920, h: 1080, touch: false }, { n: 'ultrawide 2560x1080', w: 2560, h: 1080, touch: false },
+      { n: 'iPad portrait 768x1024', w: 768, h: 1024, touch: true }, { n: 'iPad landscape 1024x768', w: 1024, h: 768, touch: true },
+      { n: 'iPad Pro 11 portrait 834x1194', w: 834, h: 1194, touch: true }, { n: 'iPad Pro 12.9 landscape 1366x1024', w: 1366, h: 1024, touch: true }
+    ];
+    for (const z of SIZES) {
+      const s = await session(browser, { viewport: { width: z.w, height: z.h }, fonts: !!SHOTS, ctxOpts: z.touch ? { hasTouch: true, isMobile: true, deviceScaleFactor: 2 } : {} });
+      const p = s.page;
+      await p.goto('https://portal.test/courses');
+      await p.waitForSelector('#xflix-root .xf-title-tile');
+      const home = await p.evaluate(() => { const r = document.getElementById('xflix-root'); return { sw: r.scrollWidth, cw: r.clientWidth }; });
+      await shot(p, 'xflix-home-' + z.w + 'x' + z.h + '.png');
+      await p.locator('#xflix-root .xf-title-tile', { hasText: 'ResusX' }).first().click();
+      await p.waitForFunction(() => document.querySelectorAll('#xflix-root .xf-row').length >= 4);
+      await p.waitForTimeout(300);
+      const m = await p.evaluate(() => {
+        const r = document.getElementById('xflix-root');
+        const hero = document.querySelector('#xflix-root .xf-hero').getBoundingClientRect();
+        const copy = document.querySelector('#xflix-root .xf-hero-copy').getBoundingClientRect();
+        const tile = document.querySelector('#xflix-root .xf-row .xf-tile').getBoundingClientRect();
+        const h = (sel) => Array.from(document.querySelectorAll('#xflix-root ' + sel)).map((e) => Math.round(e.getBoundingClientRect().height));
+        const arrows = Array.from(document.querySelectorAll('#xflix-root .xf-arrow')).map((e) => getComputedStyle(e).display);
+        return { sw: r.scrollWidth, cw: r.clientWidth, copyBottom: Math.round(copy.bottom), heroBottom: Math.round(hero.bottom), tileW: Math.round(tile.width), vw: innerWidth, tap: [].concat(h('.xf-back'), h('.xf-nav a, .xf-nav button'), h('.xf-hero .xf-btn'), h('.xf-select')), arrows };
+      });
+      check(z.n + ': no sideways scroll (home and course)', home.sw <= home.cw + 1 && m.sw <= m.cw + 1, { home, m });
+      check(z.n + ': banner text not clipped', m.copyBottom <= m.heroBottom + 1, m);
+      check(z.n + ': tiles are a sensible size (150 to 400px, at least 2 visible)', m.tileW >= 150 && m.tileW <= 400 && m.tileW * 2 <= m.vw, m);
+      if (z.touch) {
+        check(z.n + ': touch targets 44px+ and no hover arrows', m.tap.length > 0 && m.tap.every((x) => x >= 44) && m.arrows.every((d) => d === 'none'), m);
+      } else {
+        await p.locator('#xflix-root .xf-row').nth(0).hover();
+        const vis = await p.evaluate(() => Array.from(document.querySelectorAll('#xflix-root .xf-row')).some((row) => row.querySelector('.xf-track').scrollWidth > row.querySelector('.xf-track').clientWidth + 4 ? !!row.querySelector('.xf-arrow.r') && getComputedStyle(row.querySelector('.xf-arrow.r')).display !== 'none' : true));
+        check(z.n + ': mouse layout keeps scroll arrows where a row overflows', vis);
+      }
+      await shot(p, 'xflix-course-' + z.w + 'x' + z.h + '.png');
+      await s.ctx.close();
+    }
+  }
+
   console.log('T14 catalog export helper');
   {
     const s = await session(browser);

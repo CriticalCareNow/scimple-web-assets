@@ -70,6 +70,14 @@ On a phone (or the browser's phone view), open the Courses page.
 | D8 | Open a lecture and play it full screen, then close it | The video plays; closing returns to the lesson page. (This is GHL's player, not XFlix. Report problems anyway.) |
 | D9 | Safari Share button > Add to Home Screen. Open it from the Home Screen | It opens without the Safari address bar. Sign-in still works. If the icon or name looks wrong, tell me (this needs the `homeScreen` setting). |
 
+### D++. Desktop and iPad
+
+| # | Do this | You should see |
+|---|---|---|
+| D10 | Desktop browser (Chrome and Safari), full screen, then resize the window narrower and wider | Rows stay tidy, nothing scrolls sideways, tiles grow on a big monitor. Hovering a row shows scroll arrows. |
+| D11 | iPad in Safari, held upright and then sideways | Same as the phone checks D3 to D9: no clipping, easy taps, no hover arrows, no zoom on the season picker. |
+| D12 | iPad: split the screen with another app (Split View) | The page narrows without breaking. |
+
 ## E. Report back
 
 Send me one email with: the result (pass / fail) for each row above, a screenshot of B1, B4 and B6 (and D1 on a phone),

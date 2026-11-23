@@ -22,7 +22,7 @@
   'use strict';
   if (window.__xflix) return;
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.1.1';
 
   var DEFAULTS = {
     enabled: true,
@@ -663,7 +663,7 @@
       '.xf-arrow{position:absolute;top:0;bottom:56px;width:48px;z-index:5;border:0;background:linear-gradient(90deg,#0b0b0dee,transparent);color:#fff;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center}' +
       '.xf-arrow.r{right:0;background:linear-gradient(270deg,#0b0b0dee,transparent)}.xf-arrow.l{left:-1px}' +
       '.xf-scroller:hover .xf-arrow{opacity:1}.xf-arrow[hidden]{display:none}.xf-arrow .xf-ico{width:28px;height:28px;display:inline-flex}' +
-      '.xf-tile{position:relative;flex:0 0 clamp(210px,19vw,290px);scroll-snap-align:start;display:block;transition:transform .15s}' +
+      '.xf-tile{position:relative;flex:0 0 clamp(210px,19vw,390px);scroll-snap-align:start;display:block;transition:transform .15s}' +
       '.xf-tile:hover,.xf-tile:focus-visible{transform:scale(1.035);z-index:3}' +
       '.xf-tile:focus-visible{outline:2px solid var(--xf-accent);outline-offset:3px;border-radius:6px}' +
       '.xf-tile.is-locked{cursor:not-allowed}.xf-tile.is-locked:hover{transform:none}.xf-tile.is-locked .xf-poster{filter:grayscale(.7) brightness(.55)}' +
@@ -684,7 +684,7 @@
       '.xf-tile-s{margin:2px 2px 0;font-size:13px;color:var(--xf-muted)}' +
       '.xf-tile.done .xf-tile-s{color:var(--xf-accent2)}' +
       '.xf-title-tile .xf-poster{aspect-ratio:16/9}' +
-      '.xf-tile .xf-name{position:absolute;z-index:2;left:12px;right:12px;bottom:12px;font:900 clamp(22px,2.2vw,30px)/.9 "Big Shoulders Display",Impact,"Arial Narrow",sans-serif;text-transform:uppercase;text-shadow:0 2px 12px #000}' +
+      '.xf-tile .xf-name{position:absolute;z-index:2;left:12px;right:12px;bottom:12px;font:900 clamp(22px,2.2vw,38px)/.9 "Big Shoulders Display",Impact,"Arial Narrow",sans-serif;text-transform:uppercase;text-shadow:0 2px 12px #000}' +
       '.xf-back{background:none;border:0;color:var(--xf-muted);cursor:pointer;padding:0;margin:0 0 14px;font-size:14px}.xf-back:hover{color:var(--xf-text)}' +
       '.xf-note{margin:30px var(--xf-gr) 30px var(--xf-gl);padding:16px 18px;border:1px solid var(--xf-line);border-radius:8px;background:var(--xf-surface);color:var(--xf-muted);font-size:14px}' +
       '.xf-note a{color:var(--xf-accent);text-decoration:underline}' +

@@ -13,7 +13,7 @@ GHL still hosts and plays the videos and records completion; XFlix is the new lo
 | `TEST_PLAN.md` | Step-by-step checks for the test sub-account. |
 | `probe.js`, `probe2.js` | The two feasibility probes (opt-in, read-only). |
 | `TEAM_INSTRUCTIONS.md`, `RUN_PROBE_PROMPT.md` | Instructions used to run probe 1. |
-| `test/run.js` | 64 automated checks against a mock portal (`NODE_PATH=$(npm root -g) node xflix/test/run.js`). |
+| `test/run.js` | 96 automated checks against a mock portal (`NODE_PATH=$(npm root -g) node xflix/test/run.js`). |
 
 Status (Nov 22 2026): XFlix 1.1.0 is built and passes the mock-portal tests. Probe 2 passed on the real portal (see
 "Step 2 result" below), so the script CAN request the data itself. XFlix has NOT yet been installed in the test
@@ -109,5 +109,6 @@ is public. To rebuild: `python3 mockup/make_assets.py <dir>`, `node mockup/make_
 
 ## Changes
 
+- 1.1.1: tiles grow on very wide screens. New test T19 checks 4 desktop and 4 iPad sizes (96 checks).
 - 1.1.0: iPhone pass. Tap targets of 44px or more on touch screens, no hover-only effects or arrows on touch, safe-area gutters for the notch and home bar, dynamic viewport heights (Safari's moving address bar), landscape fix, season picker no longer zooms the page, optional `homeScreen` setting for Add to Home Screen. New test T18 (64 checks). Not yet tried on a real iPhone: see TEST_PLAN D3 to D9.
 - 1.0.1: first tile in a row no longer jumps left when a row is wider than the screen, and no stray left arrow (new test T17).
