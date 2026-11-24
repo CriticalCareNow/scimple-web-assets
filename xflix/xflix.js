@@ -454,7 +454,8 @@
       if (!titles.length) throw new Error('empty-library');
       return titles;
     }).catch(function (err) {
-      if (id !== state.bootId || attempt >= cfg.retries) throw err;
+      // No login seen at all after the full wait: waiting longer rarely helps, so fall back now.
+      if (id !== state.bootId || attempt >= cfg.retries || (err && err.message === 'no-auth')) throw err;
       log('library attempt ' + (attempt + 1) + ' failed, retrying', err && err.message);
       return new Promise(function (r) { setTimeout(r, cfg.retryDelayMs * (attempt + 1)); }).then(function () {
         return loadLibrary(attempt + 1, id);
