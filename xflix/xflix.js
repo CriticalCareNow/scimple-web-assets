@@ -1,4 +1,4 @@
-/*! XFlix 1.0.1
+/*! XFlix 1.2.0
  * Netflix-style course browsing for the GoHighLevel Client Portal.
  *
  * What it does
@@ -12,7 +12,7 @@
  *   - The learner's login headers stay in memory. They are never shown, stored or sent anywhere else.
  *   - If anything fails it steps aside and the learner sees GHL's normal pages:
  *       level 1  live data from the portal
- *       level 2  the saved catalog in XFLIX_CONFIG.catalog (no personal progress or locks)
+ *       level 2  the saved catalog in XFLIX_CONFIG.catalog or window.XFLIX_CATALOG (no personal progress or locks)
  *       level 3  nothing (GHL's normal pages)
  *   - Kill switch: add ?xflix=off to any portal address (lasts for that browser tab session).
  *
@@ -22,7 +22,7 @@
   'use strict';
   if (window.__xflix) return;
 
-  var VERSION = '1.1.1';
+  var VERSION = '1.2.0';
 
   var DEFAULTS = {
     enabled: true,
@@ -34,6 +34,8 @@
     seasonPattern: '^(.*?)\\s*[:\\-\\u2013\\u2014]?\\s*((?:19|20)\\d{2})\\s*$',
     waitForAuthMs: 8000,
     requestTimeoutMs: 20000,
+    retries: 2,
+    retryDelayMs: 1500,
     cacheMs: 30000,
     concurrency: 4,
     hideStatusPattern: '(draft|hidden|unpublish|private|archiv)',
@@ -106,7 +108,10 @@
     if (l) net.loc = l[1];
     var clean = {};
     Object.keys(hdrs || {}).forEach(function (k) { if (!SKIP_HEADERS.test(k)) clean[k] = hdrs[k]; });
-    if (Object.keys(clean).length) {
+    var hasAuth = Object.keys(clean).some(function (k) { return /^authorization$/i.test(k); });
+    var hadAuth = !!(net.headers && Object.keys(net.headers).some(function (k) { return /^authorization$/i.test(k); }));
+    // A request without a login header (a public or background call) must never replace a set that has one.
+    if (Object.keys(clean).length && (hasAuth || !hadAuth)) {
       net.headers = clean;
       net.creds = creds || null;
       var m = u.match(/^(https:\/\/[a-z0-9.-]*leadconnectorhq\.com\/clientportal-middleware)\//i);
@@ -281,7 +286,7 @@
 
   function loadCatalog(course) {
     var entry = null;
-    ((cfg.catalog && cfg.catalog.courses) || []).forEach(function (c) { if (String(c.id) === String(course.id)) entry = c; });
+    (((savedCatalog() || {}).courses) || []).forEach(function (c) { if (String(c.id) === String(course.id)) entry = c; });
     var modules = ((entry && entry.modules) || []).map(function (m, i) { return { id: m.id, title: m.title, sequenceNo: i }; });
     var lists = ((entry && entry.modules) || []).map(function (m) {
       return (m.lessons || []).map(function (l, i) {
@@ -387,6 +392,7 @@
     ts: 0,
     bootId: 0,
     giveUpUntil: 0,
+    lastError: null,
     open: false
   };
 
@@ -422,25 +428,51 @@
     state.bootId += 1;
     var id = state.bootId;
     render();
-    waitForAuth().then(function () {
-      return api('/courses/learners/locations/' + net.loc + '/courses/library');
-    }).then(function (lib) {
+    loadLibrary(0, id).then(function (titles) {
       if (id !== state.bootId) return;
       state.mode = 'live';
       state.details = {};
       state.home = { items: null };
       state.ts = Date.now();
-      afterLibrary(groupTitles(asArray(lib, ['courses', 'data', 'items'])));
+      state.lastError = null;
+      afterLibrary(titles);
     }).catch(function (err) {
       if (id !== state.bootId) return;
-      log('live data failed', err && err.message);
+      state.lastError = (err && err.message) || 'unknown';
+      log('live data failed', state.lastError);
       fallback();
     });
   }
 
+  // Ask for the learner's course list. A refused, failed or empty answer is tried again a little later
+  // (by then the portal has usually refreshed its login), before falling back to the saved catalog.
+  function loadLibrary(attempt, id) {
+    return waitForAuth().then(function () {
+      return api('/courses/learners/locations/' + net.loc + '/courses/library');
+    }).then(function (lib) {
+      var titles = groupTitles(asArray(lib, ['courses', 'data', 'items']));
+      if (!titles.length) throw new Error('empty-library');
+      return titles;
+    }).catch(function (err) {
+      if (id !== state.bootId || attempt >= cfg.retries) throw err;
+      log('library attempt ' + (attempt + 1) + ' failed, retrying', err && err.message);
+      return new Promise(function (r) { setTimeout(r, cfg.retryDelayMs * (attempt + 1)); }).then(function () {
+        return loadLibrary(attempt + 1, id);
+      });
+    });
+  }
+
+  // The saved catalog may come from the settings block or from a catalog file loaded alongside XFlix.
+  function savedCatalog() {
+    var c = cfg.catalog || (window.XFLIX_CONFIG && window.XFLIX_CONFIG.catalog) || window.XFLIX_CATALOG || null;
+    return c && c.courses && c.courses.length ? c : null;
+  }
+
   function fallback() {
-    var cat = cfg.catalog && cfg.catalog.courses;
-    if (cat && cat.length) {
+    var saved = savedCatalog();
+    var cat = saved && saved.courses;
+    if (cat) {
+      cfg.catalog = saved;
       state.mode = 'catalog';
       state.details = {};
       state.home = { items: null };

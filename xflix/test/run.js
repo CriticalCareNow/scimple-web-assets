@@ -91,6 +91,9 @@ document.getElementById('p').textContent = location.pathname;
 window.spaGo = function (p) { history.pushState(null, '', p); document.getElementById('p').textContent = p; };
 if (location.pathname.indexOf('/courses') === 0 && location.search.indexOf('noapi=1') === -1) {
   fetch('${API_ROOT}/courses/learners/locations/${LOC}/courses/library', { headers: { Authorization: '${SECRET}', channel: 'APP' } }).catch(function () {});
+  if (location.search.indexOf('anon=1') !== -1) {
+    fetch('${API_ROOT}/courses/learners/locations/${LOC}/settings', { headers: { channel: 'APP', source: 'WEB_USER' } }).catch(function () {});
+  }
 }
 </script></body></html>`;
 
@@ -114,6 +117,7 @@ async function session(browser, o) {
   const ctx = await browser.newContext(Object.assign({ viewport: o.viewport || { width: 1400, height: 900 } }, o.ctxOpts || {}));
   const page = await ctx.newPage();
   const requests = [];
+  let libCalls = 0;
   const hosts = new Set();
   const consoleMsgs = [];
   page.on('console', (m) => consoleMsgs.push(m.text()));
@@ -140,7 +144,12 @@ async function session(browser, o) {
     const json = (status, body) => route.fulfill({ status, headers: cors, contentType: 'application/json', body: JSON.stringify(body) });
     if (!authOk || o.deny) return json(401, { message: 'Unauthorized' });
     const base = '/courses/learners/locations/' + LOC + '/courses';
-    if (p === base + '/library') return json(200, w.library);
+    if (p === base + '/library') {
+      libCalls = (libCalls || 0) + 1;
+      if (o.failLibrary && libCalls <= o.failLibrary) return json(500, { message: 'busy' });
+      if (o.emptyLibrary && libCalls <= o.emptyLibrary) return json(200, []);
+      return json(200, w.library);
+    }
     let m;
     if ((m = p.match(new RegExp('^' + base + '/([^/]+)/modules$')))) return json(200, { modules: w.modules[m[1]] || [], totalModules: (w.modules[m[1]] || []).length });
     if ((m = p.match(new RegExp('^' + base + '/([^/]+)/modules/([^/]+)/lessons$')))) {
@@ -154,7 +163,8 @@ async function session(browser, o) {
   });
 
   const cfg = Object.assign({ waitForAuthMs: 1500, fonts: !!o.fonts, cacheMs: 30000 }, o.config || {});
-  const head = o.rawConfig ? o.rawConfig : 'window.XFLIX_CONFIG = ' + JSON.stringify(cfg) + ';';
+  let head = o.rawConfig ? o.rawConfig : 'window.XFLIX_CONFIG = ' + JSON.stringify(cfg) + ';';
+  if (o.catalogFile) head += '\nwindow.XFLIX_CATALOG = ' + JSON.stringify(o.catalogFile) + ';';
   await page.addInitScript({ content: head + '\n' + SRC });
   return { ctx, page, requests, hosts, consoleMsgs };
 }
@@ -311,7 +321,7 @@ async function shot(page, name, full) {
     const s = await session(browser, { deny: true, config: { catalog: cat }, fonts: !!SHOTS });
     const p = s.page;
     await p.goto('https://portal.test/courses');
-    await p.waitForSelector('#xflix-root .xf-tile');
+    await p.waitForSelector('#xflix-root .xf-tile:not(.xf-skel)');
     const t = await p.locator('#xflix-root').innerText();
     check('saved catalog renders the course page', t.includes('Day 1') && t.includes('Lecture one'));
     check('no personal progress or locks in catalog mode', !t.includes('watched') && (await p.locator('.xf-tile.is-locked').count()) === 0 && (await p.locator('.xf-state').count()) === 0);
@@ -549,6 +559,51 @@ async function shot(page, name, full) {
     const j = JSON.parse(out);
     check('export lists courses, folders and lectures', j.courses.length === 3 && j.courses[0].modules.length === 4 && j.courses[0].modules[0].lessons.length === 4, j.courses.map((c) => c.modules.length));
     check('export omits draft folders and has no login data', !/Draft Folder|Should never show/.test(out) && !out.includes('SECRET-LEARNER'));
+    await s.ctx.close();
+  }
+
+  console.log('T21 a later portal request without a login header does not break XFlix');
+  {
+    const s = await session(browser, { config: { retries: 0 } });
+    const p = s.page;
+    await p.goto('https://portal.test/courses?anon=1');
+    await p.waitForSelector('#xflix-root .xf-tile:not(.xf-skel)');
+    await p.waitForTimeout(300);
+    check('XFlix stays up with live data', (await overlayOn(p)) && (await p.evaluate(() => window.__xflix.state.mode)) === 'live');
+    check('library request was sent with the login header', s.requests.filter((r) => /\/library$/.test(r.path)).every((r) => r.authOk));
+    await s.ctx.close();
+  }
+
+  console.log('T22 the course list fails twice, then works: XFlix retries and shows live data');
+  {
+    const s = await session(browser, { failLibrary: 3, config: { retryDelayMs: 200 } });
+    const p = s.page;
+    await p.goto('https://portal.test/courses');
+    await p.waitForSelector('#xflix-root .xf-tile:not(.xf-skel)', { timeout: 8000 });
+    check('live data shown after retries', (await p.evaluate(() => window.__xflix.state.mode)) === 'live' && (await p.evaluate(() => window.__xflix.state.status)) === 'ready');
+    await s.ctx.close();
+  }
+
+  console.log('T23 the course list comes back empty once: retried');
+  {
+    const s = await session(browser, { emptyLibrary: 2, config: { retryDelayMs: 200 } });
+    const p = s.page;
+    await p.goto('https://portal.test/courses');
+    await p.waitForSelector('#xflix-root .xf-tile:not(.xf-skel)', { timeout: 8000 });
+    check('live data shown after an empty answer', (await p.evaluate(() => window.__xflix.state.mode)) === 'live');
+    await s.ctx.close();
+  }
+
+  console.log('T24 refused, with the catalog loaded from a separate file: catalog is used');
+  {
+    const cat = { courses: [{ id: 'c26', title: 'ResusX:2026', description: 'Saved catalog.', poster: img(1), modules: [{ id: 'm1', title: 'Day 1', lessons: [{ id: 'l1', title: 'Lecture one', poster: img(2), duration: 1200 }] }] }] };
+    const s = await session(browser, { deny: true, catalogFile: cat, config: { retryDelayMs: 200 } });
+    const p = s.page;
+    await p.goto('https://portal.test/courses');
+    await p.waitForSelector('#xflix-root .xf-tile:not(.xf-skel)', { timeout: 8000 });
+    await p.waitForTimeout(500);
+    check('XFlix stays up in catalog mode', (await overlayOn(p)) && (await p.evaluate(() => window.__xflix.state.mode)) === 'catalog');
+    check('reason is recorded for support', (await p.evaluate(() => window.__xflix.state.lastError)) === 'http-401');
     await s.ctx.close();
   }
 

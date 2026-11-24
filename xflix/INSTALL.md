@@ -38,7 +38,10 @@ XFlix has three levels and always falls back one step instead of showing a broke
 
 1. **Live data:** the learner's own courses, progress and locks from the portal (needs the portal to make at least
    one data request after XFlix loads; normal page loads do).
-2. **Saved catalog:** if live data fails and `catalog` is set in your settings, XFlix shows your saved course list
+   If the course list is refused, fails or comes back empty, XFlix tries again twice (after about 1.5 and 3 seconds)
+   before falling back. It also ignores portal requests that carry no login header, so they can't spoil the login it
+   learned (this was the cause of the "dark for 3 seconds, then plain GHL" report in Nov 2026).
+2. **Saved catalog:** if live data fails and a catalog is set (in your settings, or a catalog file loaded first), XFlix shows your saved course list
    (no personal progress or locks). Lectures still open in GHL.
 3. **GHL's normal pages:** if neither works within a few seconds, XFlix removes itself.
 
@@ -52,6 +55,10 @@ Use this once the courses are final, and again whenever you add courses or folde
 1. Open the portal as a test learner with `?xflix=export` on the end of the address and go to **Courses**.
 2. Click **Export catalog** (top right), then **Copy**.
 3. Paste it into your settings block as `catalog: { ... }` and save.
+
+Instead of pasting it into the settings, you can keep it as a file that sets `window.XFLIX_CATALOG` and load it
+before XFlix. `catalog-sandbox.js` is that file for the TEST sub-account, built from the GHL API; `test-install.js`
+loads it.
 
 The catalog lists course, folder and lecture names, IDs and picture links. It has no learner data or login details.
 
