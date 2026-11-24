@@ -65,11 +65,12 @@ The catalog lists course, folder and lecture names, IDs and picture links. It ha
 | `heroImages` | Banner pictures by title name or course title | course poster |
 | `catalog` | Saved catalog (level 2 fallback) | none |
 | `homeRoutes` | Portal pages XFlix replaces | `['/courses']` |
-| `seasonPattern` | How a course title is split into title and season | `Name:2026`, `Name 2026`, `Name - 2026` |
+| `seasonPattern` | How a course title is split into title and season. The default accepts `Name:2026`, `Name 2026`, `Name - 2026`. `config.example.js` ships a wider one that also accepts `Name:2026 (Enduring)` and `Name (2026)` | see left |
 | `hideStatusPattern` | Folder or lecture status words that hide an item | `draft, hidden, unpublish, private, archiv` |
 | `colors` | Override `accent`, `accent2`, `bg`, `surface`, `raised`, `line`, `text`, `muted` | black, orange, teal |
 | `fonts` | Load the XFlix fonts from Google Fonts | `true` |
 | `waitForAuthMs` | How long to wait for the portal's login before falling back | `8000` |
+| `homeScreen` | iPhone "Add to Home Screen" setup: `{ title: 'XFlix', icon: 'https://.../icon-180.png' }` (icon is a 180x180 PNG on a public https address). Adds only tags the portal lacks. Leave out to add nothing | none |
 | `enabled` | Set `false` to switch XFlix off in settings | `true` |
 
 ## Naming courses so seasons group
@@ -84,14 +85,15 @@ Courses with the same name and different years become seasons of one title. Name
 - It does not track CME credit. Learners use your "Claim CME" links at the end of a folder.
 - The learner's login details stay in the browser's memory and are never shown or stored.
 
-## Not yet confirmed
+## Confirmed and not yet confirmed
 
-These depend on the real portal and are checked by `probe2.js` and `TEST_PLAN.md`:
+Confirmed on the real portal (probe 2, Oct 29 2026): our script can request the learner's courses, folders, lectures,
+locks and completed list itself; draft folders are not returned to learners; completed items carry `postId`.
 
-- That the script can request course data itself (probe 2).
-- The exact shape of the "completed lectures" list. XFlix accepts a list of IDs or a list of objects with
-  `lessonId`, `postId` or `id`.
-- Whether draft folders are hidden from learners already (XFlix hides them anyway).
+Still to confirm in the test sub-account (`TEST_PLAN.md`):
+
 - Whether the portal allows loading the script from jsDelivr and styles added by script. If not, paste `xflix.js`
   itself into the Custom JavaScript box instead of the loader.
+- Whether a partly watched lecture is wrongly shown as Watched (the completed list has a `percentage` field).
 - How the course and lesson pages look once the theme settings are applied. Those pages are drawn by GHL.
+- Whether the "Get access" row for unowned years is wanted (upsell data was empty in the test account).

@@ -13,10 +13,11 @@ GHL still hosts and plays the videos and records completion; XFlix is the new lo
 | `TEST_PLAN.md` | Step-by-step checks for the test sub-account. |
 | `probe.js`, `probe2.js` | The two feasibility probes (opt-in, read-only). |
 | `TEAM_INSTRUCTIONS.md`, `RUN_PROBE_PROMPT.md` | Instructions used to run probe 1. |
-| `test/run.js` | 50 automated checks against a mock portal (`NODE_PATH=$(npm root -g) node xflix/test/run.js`). |
+| `test/run.js` | 108 automated checks against a mock portal (`NODE_PATH=$(npm root -g) node xflix/test/run.js`). |
 
-Status: XFlix 1.0.0 is built and passes the mock-portal tests. It has NOT yet been run against the real portal. That needs the
-probe 2 result and `TEST_PLAN.md`.
+Status (Nov 22 2026): XFlix 1.1.0 is built and passes the mock-portal tests. Probe 2 passed on the real portal (see
+"Step 2 result" below), so the script CAN request the data itself. XFlix has NOT yet been installed in the test
+sub-account. Next: install it there and run `TEST_PLAN.md`.
 
 ---
 
@@ -83,3 +84,32 @@ Probe 2 also tallies the `visibility` value of every folder and lecture it sees 
 so we can tell whether draft folders are returned to a learner. With Melvin's setup (ResusX:2025 has
 11 folders, 3 of them draft) the report should show either 8 published folders (drafts hidden) or 11
 with a mix of values (drafts returned, so XFlix must filter them out).
+
+## Step 2 result (probe 2, run by Melvin, Oct 29 2026)
+
+All 17 read-only requests returned 200. Our script can request the learner's data itself, by replaying the headers
+the portal already sends (header names seen: authorization, channel, source, version, x-location-id,
+x-product-id, x-app-build, x-cp-core-version, x-platform-details, Accept; no cookies needed).
+
+- Library: 2 courses. Folders: 15 returned (13 `published`, 2 `locked`). Lectures: 51 seen, 30 with a video duration.
+- Draft folders are NOT returned to learners (ResusX:2025 has 11 in admin, the learner sees 8).
+- Completed list items look like `{ id, postId, percentage }`. XFlix reads `postId` (it matches the lecture id). Unknown:
+  whether `percentage` can be below 100 for a lecture that was only partly watched. `TEST_PLAN.md` B7b checks this.
+- The "mark as finished" button reads "Mark as Complete" and changes to "Completed".
+- `courses/library/upsell` and `courses/library/discover` return `{ items: [], total, page, limit }` (empty in the test
+  account), so a "Get access" row can be built later, but its item shape is still unknown.
+- Report calls took 270 to 1300 ms each.
+
+## Mockup (`mockup/`)
+
+`mockup/` builds an interactive mockup: the real `xflix.js` running against a fake GHL data service with sample ResusX
+content. It uses real ResusX thumbnails from the team's skills folder and generated title-card thumbnails and banners.
+The built page (`xflix-mockup.html`, about 0.9 MB) is NOT committed because it embeds real faculty thumbnails and this repo
+is public. To rebuild: `python3 mockup/make_assets.py <dir>`, `node mockup/make_thumbs.js <dir>`, `python3 mockup/build.py <dir> <out.html>`.
+
+## Changes
+
+- Config: `config.example.js` now ships a wider `seasonPattern` (accepts "(Enduring)" and "(2025)" titles). New test T20 (108 checks). No script change.
+- 1.1.1: tiles grow on very wide screens. New test T19 checks 4 desktop and 4 iPad sizes (96 checks).
+- 1.1.0: iPhone pass. Tap targets of 44px or more on touch screens, no hover-only effects or arrows on touch, safe-area gutters for the notch and home bar, dynamic viewport heights (Safari's moving address bar), landscape fix, season picker no longer zooms the page, optional `homeScreen` setting for Add to Home Screen. New test T18 (64 checks). Not yet tried on a real iPhone: see TEST_PLAN D3 to D9.
+- 1.0.1: first tile in a row no longer jumps left when a row is wider than the screen, and no stray left arrow (new test T17).

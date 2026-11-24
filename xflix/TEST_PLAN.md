@@ -1,7 +1,11 @@
 # XFlix test plan (test sub-account only)
 
 Run this AFTER `probe2.js` has passed. Use the same test sub-account and learner as the probes
-(products `ResusX:2026` and `ResusX:2025`, learner `melvin@simplcme.com`).
+(products `ResusX:2026` and `ResusX:2025`, offer "XFlix Test").
+The old test learner (`melvin@simplcme.com`) can no longer be used because that mailbox is gone. Before you start, create a new test
+learner with an email address the tester can read (for example `cylah+xflixtest@simplcme.com`), give that contact access to both
+products through the same offer, and mark one lecture complete in each product so there is progress to see. Remove the old test
+learner from the test sub-account.
 
 Rules: test account only; follow the steps in order; if something does not match "You should see", stop and send a
 screenshot of what you see. Do not improvise.
@@ -27,6 +31,7 @@ Open a private window and go to the portal address. Log in as the learner (the c
 | B5 | Count the folder rows | Draft folders are NOT shown. Compare with the number the learner saw in probe 2. |
 | B6 | Find the locked folder ("Claiming Your CME") | Its lectures are dimmed with a lock and the text "This folder is locked...". They cannot be clicked. |
 | B7 | Find the lecture you marked complete in probe 2 | It shows a teal check and the word **Watched**. |
+| B7b | Play a different lecture for about 10 seconds WITHOUT marking it complete, then return to the XFlix course page (refresh if needed) | That lecture shows **In progress** (or no badge), NOT **Watched**. If it shows Watched, tell me. |
 | B8 | Open the season picker and pick **Season 2025** | The folders change to 2025's folders. |
 | B9 | Click a lecture that is not locked | GHL's normal lesson page opens and the video plays. |
 | B10 | On that lesson, press GHL's mark-complete button, then use the browser Back button to return to the course list | The XFlix page returns and, within about 30 seconds (or after a refresh), that lecture shows **Watched** and the progress line goes up by 1. |
@@ -52,6 +57,26 @@ On a phone (or the browser's phone view), open the Courses page.
 |---|---|---|
 | D1 | Scroll the page | No sideways scrolling of the whole page. Rows scroll sideways by swiping. |
 | D2 | Tap a lecture | GHL's lesson page opens. |
+
+### D+. iPhone (use a real iPhone in Safari, not only the browser's phone view)
+
+| # | Do this | You should see |
+|---|---|---|
+| D3 | Open the Courses page, then turn the phone sideways and back | The banner text is not cut off. Nothing hides under the notch or the rounded corners. |
+| D4 | Look at the top bar and the buttons (Back, Resume, Claim CME, season picker) | Each is easy to hit with a thumb. Nothing needs two tries. |
+| D5 | Tap the season picker | The list opens and the page does NOT zoom in. |
+| D6 | Tap and release a lecture tile | It opens GHL's lesson. The tile does not stay "enlarged" after you come back. |
+| D7 | Scroll to the very bottom of a long course | The last row clears the home bar at the bottom of the screen. |
+| D8 | Open a lecture and play it full screen, then close it | The video plays; closing returns to the lesson page. (This is GHL's player, not XFlix. Report problems anyway.) |
+| D9 | Safari Share button > Add to Home Screen. Open it from the Home Screen | It opens without the Safari address bar. Sign-in still works. If the icon or name looks wrong, tell me (this needs the `homeScreen` setting). |
+
+### D++. Desktop and iPad
+
+| # | Do this | You should see |
+|---|---|---|
+| D10 | Desktop browser (Chrome and Safari), full screen, then resize the window narrower and wider | Rows stay tidy, nothing scrolls sideways, tiles grow on a big monitor. Hovering a row shows scroll arrows. |
+| D11 | iPad in Safari, held upright and then sideways | Same as the phone checks D3 to D9: no clipping, easy taps, no hover arrows, no zoom on the season picker. |
+| D12 | iPad: split the screen with another app (Split View) | The page narrows without breaking. |
 
 ## E. Report back
 

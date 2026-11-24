@@ -1,0 +1,216 @@
+<title>XFlix Mockup</title>
+<style>
+:root{color-scheme:dark;--bg:#0B0B0D;--panel:#141418;--line:#2A2A31;--text:#F5F1EA;--muted:#9A968F;--orange:#FF7A1A;--teal:#18C5BB}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+#xflix-root .xf-main{padding-bottom:120px}
+#xf-mock-ui{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:2147483600;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;
+  max-width:calc(100vw - 24px);padding:6px 8px;border:1px solid var(--line);border-radius:999px;background:rgba(20,20,24,.94);box-shadow:0 10px 30px rgba(0,0,0,.55);font-size:13px}
+#xf-mock-ui .lbl{color:var(--muted);padding:0 6px}
+@media (min-width:721px){#xf-mock-ui{top:14px;bottom:auto;left:auto;right:18px;transform:none;border-radius:14px;max-width:min(780px,calc(100vw - 36px))}}
+@media (max-width:720px){#xf-mock-ui{bottom:8px;padding:4px 6px;gap:2px}#xf-mock-ui .lbl{display:none}#xf-mock-ui button{padding:6px 9px;font-size:12px}}
+#xf-mock-ui button{border:0;border-radius:999px;padding:7px 13px;background:transparent;color:var(--text);font:600 13px inherit;cursor:pointer}
+#xf-mock-ui button[aria-pressed="true"]{background:var(--orange);color:#1a0900}
+#xf-mock-ui .sm{display:none}
+@media (max-width:720px){#xf-mock-ui .lg{display:none}#xf-mock-ui .sm{display:inline}}
+#xf-mock-ui button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+#xf-ghl{position:fixed;inset:0;z-index:2147483601;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:16px}
+#xf-ghl[hidden]{display:none}
+#xf-ghl .card{width:min(760px,100%);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;display:grid;gap:14px}
+#xf-ghl .tag{font:600 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+#xf-ghl h2{margin:0;font-size:clamp(18px,3vw,24px);line-height:1.2;text-wrap:balance}
+#xf-ghl p{margin:0;color:#d6d1c9;line-height:1.5;max-width:62ch}
+#xf-ghl .player{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:8px;background:#000;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
+#xf-ghl .player span{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center}
+#xf-ghl .player span::after{content:"";margin-left:5px;border-left:20px solid #fff;border-top:12px solid transparent;border-bottom:12px solid transparent}
+#xf-ghl .player i{position:absolute;left:14px;bottom:12px;right:14px;height:4px;border-radius:2px;background:rgba(255,255,255,.22)}
+#xf-ghl .player i b{display:block;width:34%;height:100%;border-radius:2px;background:var(--orange)}
+#xf-ghl button{justify-self:start;border:0;border-radius:6px;padding:11px 22px;background:var(--orange);color:#1a0900;font:700 15px inherit;cursor:pointer}
+#xf-ghl button:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+</style>
+
+<div id="xf-boot" style="padding:24px;color:#9A968F;font:14px system-ui">Loading the XFlix mockup&hellip;</div>
+
+<div id="xf-mock-ui" role="group" aria-label="Mockup scenarios">
+  <span class="lbl">Sample ResusX content. Learner owns:</span>
+  <button type="button" data-s="multi" aria-pressed="true"><span class="lg">ResusX 2025 + 2026 + Rounds</span><span class="sm">2025 + 2026 + Rounds</span></button>
+  <button type="button" data-s="years" aria-pressed="false"><span class="lg">ResusX 2025 + 2026</span><span class="sm">2025 + 2026</span></button>
+  <button type="button" data-s="single" aria-pressed="false"><span class="lg">ResusX 2026 only</span><span class="sm">2026 only</span></button>
+</div>
+
+<div id="xf-ghl" hidden role="dialog" aria-modal="true" aria-labelledby="xf-ghl-h">
+  <div class="card">
+    <div class="tag">This is where GHL takes over</div>
+    <h2 id="xf-ghl-h"></h2>
+    <div class="player" aria-hidden="true"><span></span><i><b></b></i></div>
+    <p id="xf-ghl-p"></p>
+    <button type="button" id="xf-ghl-back">Back to XFlix</button>
+  </div>
+</div>
+
+<script>
+/* ---------- fake GHL data service (sample content, nothing real) ---------- */
+(function () {
+  var API = 'https://services.leadconnectorhq.com/clientportal-middleware';
+  var LOC = 'DEMOLOC';
+  var IMG = {
+    'https://mock.local/peep.jpg': 'data:image/jpeg;base64,__IMG_PEEP__',
+    'https://mock.local/thyroid.jpg': 'data:image/jpeg;base64,__IMG_THYROID__',
+    'https://mock.local/rounds.jpg': 'data:image/jpeg;base64,__IMG_ROUNDS__',
+    'https://mock.local/banner-resusx.jpg': 'data:image/jpeg;base64,__IMG_BANNER_RESUSX__',
+    'https://mock.local/banner-rounds.jpg': 'data:image/jpeg;base64,__IMG_BANNER_ROUNDS__'
+  };
+  var THUMB_DATA = /*THUMB_DATA*/{};
+  function T(id) { return THUMB_DATA[id] ? 'https://mock.local/t-' + id + '.jpg' : ''; }
+  var setAttr = Element.prototype.setAttribute;
+  Element.prototype.setAttribute = function (n, v) {
+    if (this.tagName === 'IMG' && n === 'src') {
+      if (IMG[v]) v = IMG[v];
+      else { var tm = /^https:\/\/mock\.local\/t-(.+)\.jpg$/.exec(v); if (tm && THUMB_DATA[tm[1]]) v = THUMB_DATA[tm[1]]; }
+    }
+    return setAttr.call(this, n, v);
+  };
+
+  function M(id, title, seq) { return { id: id, title: title, sequenceNo: seq, visibility: 'published' }; }
+  function L(id, title, seq, o) {
+    o = o || {};
+    return { id: id, title: title, description: '', sequenceNo: seq, posterImage: o.img || T(id), visibility: 'published', started: !!o.started,
+      asset_urls: { meta: { durationInSeconds: (o.min || 18) * 60 }, thumbnailUrl: o.img || T(id) } };
+  }
+  var DAY1 = 'Day 1 · Airway & Breathing', DAY2 = 'Day 2 · Circulation & Shock', DAY3 = 'Day 3 · Neuro & Tox';
+
+  var courses = {
+    c26: { id: 'c26', title: 'ResusX:2026', description: 'Three days of resuscitation, from airway to arrest. Lectures from the 2026 meeting.', posterImage: 'https://mock.local/banner-resusx.jpg', libraryOrder: 0, courseStarted: true },
+    c25: { id: 'c25', title: 'ResusX:2025', description: 'The 2025 meeting: ventilation, shock and the arrest patient.', posterImage: 'https://mock.local/banner-resusx.jpg', libraryOrder: 1, courseStarted: true },
+    cr: { id: 'cr', title: 'ResusX:Rounds', description: 'Grand Rounds and quick reviews with the ResusX faculty.', posterImage: 'https://mock.local/banner-rounds.jpg', libraryOrder: 2, courseStarted: true }
+  };
+  var modules = {
+    c26: [M('m1', DAY1, 1), M('m2', DAY2, 2), M('m3', DAY3, 3), M('m4', 'Claiming Your CME', 4)],
+    c25: [M('n1', 'Day 1 · Airway & Ventilation', 1), M('n2', 'Day 2 · Shock', 2), M('n3', 'Day 3 · Arrest & ECMO', 3)],
+    cr: [M('q1', 'Grand Rounds', 1), M('q2', 'Rapid Reviews', 2)]
+  };
+  var lessons = {
+    m1: [L('l1', 'Driving Pressure for the PEEP-ple', 1, { img: 'https://mock.local/peep.jpg', min: 22 }), L('l2', 'HFNC: Who Fails and When', 2, { min: 18 }),
+      L('l3', 'Awake Intubation Without Fear', 3, { started: true, min: 25 }), L('l4', 'Post-Intubation Hypotension', 4, { min: 19 }), L('l5', 'The Crashing Airway', 5, { min: 24 })],
+    m2: [L('l6', "Maybe It's Not Just Sepsis: The Sick Hypothyroid Patient", 1, { img: 'https://mock.local/thyroid.jpg', min: 25 }), L('l7', 'Pressors in Plain English', 2, { min: 21 }),
+      L('l8', 'Fluid Tolerance at the Bedside', 3, { min: 17 }), L('l9', 'RV Failure for the Rest of Us', 4, { min: 23 }), L('l10', 'ECMO in the ED', 5, { min: 20 })],
+    m3: [L('l11', 'Status Epilepticus in 10', 1, { min: 16 }), L('l12', 'The Agitated Overdose', 2, { min: 22 }), L('l13', 'ICH: Pressure and Reversal', 3, { min: 19 }), L('l14', 'Brain Death Basics', 4, { min: 18 })],
+    m4: [L('l15', 'Claim your credit', 1, { min: 2 })],
+    n1: [L('p1', 'Ventilator Basics, Done Right', 1, { min: 24 }), L('p2', 'Asthma on the Vent', 2, { min: 20 }), L('p3', 'NIV: When to Push and When to Stop', 3, { min: 19 }), L('p4', 'Video Laryngoscopy Pearls', 4, { started: true, min: 17 })],
+    n2: [L('p5', 'Septic Shock Beyond the Bundle', 1, { min: 26 }), L('p6', 'Vasopressin and Friends', 2, { min: 18 }), L('p7', 'POCUS for the Hypotensive Patient', 3, { min: 21 }), L('p8', 'Cardiogenic Shock Pathways', 4, { min: 23 })],
+    n3: [L('p9', 'Stop Doing CPR Wrong', 1, { min: 20 }), L('p10', 'ECPR: Who Benefits', 2, { min: 22 }), L('p11', 'After ROSC: The First Hour', 3, { min: 24 })],
+    q1: [L('r1', 'Stop Doing CPR Wrong!', 1, { img: 'https://mock.local/rounds.jpg', min: 55 }), L('r2', 'Traumatic Arrest: Where ACLS Falls Short', 2, { min: 52 }), L('r3', 'Undifferentiated Shock', 3, { min: 48 })],
+    q2: [L('r4', 'Blood Shortages: What Now?', 1, { min: 1 }), L('r5', 'Decongestion: How Hard to Push', 2, { min: 1 }), L('r6', 'Pre-hospital Blood Works', 3, { min: 1 })]
+  };
+  function done(ids) { return { completedLessons: ids.map(function (id) { return { id: 'c-' + id, postId: id, percentage: 100 }; }), publishedPosts: 12 }; }
+  var completed = { c26: done(['l1', 'l2', 'l6']), c25: done(['p1', 'p2', 'p5']), cr: done(['r1']) };
+  function open(ids, locked) { var m = {}; ids.forEach(function (i) { m[i] = { isUnlocked: true }; }); (locked || []).forEach(function (i) { m[i] = { isUnlocked: false }; });
+    return { categoryUnlockedMap: m, postUnlockedMap: {}, dripCategoryUnlockedMap: {}, dripCategoryAvailableAtMap: {} }; }
+  var unlocked = { c26: open(['m1', 'm2', 'm3'], ['m4']), c25: open(['n1', 'n2', 'n3']), cr: open(['q1', 'q2']) };
+  var sequence = {
+    c26: { lastLessonId: 'l3', lastLesson: { id: 'l3', title: 'Awake Intubation Without Fear', categoryId: 'm1', posterImage: T('l3') }, lastLessonCategoryId: 'm1' },
+    c25: { lastLessonId: 'p4', lastLesson: { id: 'p4', title: 'Video Laryngoscopy Pearls', categoryId: 'n1', posterImage: T('p4') }, lastLessonCategoryId: 'n1' },
+    cr: { lastLessonId: 'r2', lastLesson: { id: 'r2', title: 'Traumatic Arrest: Where ACLS Falls Short', categoryId: 'q1', posterImage: T('r2') }, lastLessonCategoryId: 'q1' }
+  };
+  var WORLDS = { multi: ['c26', 'c25', 'cr'], years: ['c26', 'c25'], single: ['c26'] };
+  var scenario = 'multi';
+
+  var realFetch = window.fetch;
+  function json(body) { return new Response(JSON.stringify(body), { status: 200, headers: { 'content-type': 'application/json' } }); }
+  function respond(url) {
+    var p = url.replace(API, '').split('?')[0];
+    var base = '/courses/learners/locations/' + LOC + '/courses';
+    var m;
+    if (p === base + '/library') return json(WORLDS[scenario].map(function (id) { return courses[id]; }));
+    if ((m = p.match(new RegExp('^' + base + '/([^/]+)/modules$')))) return json({ modules: modules[m[1]] || [], totalModules: (modules[m[1]] || []).length });
+    if ((m = p.match(new RegExp('^' + base + '/([^/]+)/modules/([^/]+)/lessons$')))) return json({ lessons: lessons[m[2]] || [], totalLessons: (lessons[m[2]] || []).length });
+    if ((m = p.match(new RegExp('^' + base + '/([^/]+)/lessons/completed$')))) return json(completed[m[1]] || { completedLessons: [] });
+    if ((m = p.match(new RegExp('^' + base + '/([^/]+)/unlocked-modules$')))) return json(unlocked[m[1]] || {});
+    if ((m = p.match(new RegExp('^' + base + '/([^/]+)/lessons/sequence$')))) return json(sequence[m[1]] || {});
+    return new Response('{}', { status: 404 });
+  }
+  window.fetch = function (input, init) {
+    var url = typeof input === 'string' ? input : (input && input.url) || '';
+    if (url.indexOf(API) === 0) {
+      return new Promise(function (resolve) { setTimeout(function () { resolve(respond(url)); }, 140 + Math.random() * 260); });
+    }
+    return realFetch.apply(this, arguments);
+  };
+
+  window.__mock = {
+    API: API, LOC: LOC,
+    set: function (name) {
+      scenario = name;
+      var s = window.__xflix && window.__xflix.state;
+      if (!s) return;
+      s.status = 'idle'; s.details = {}; s.home = { items: null };
+      history.replaceState(null, '', location.href);
+    },
+    scenario: function () { return scenario; }
+  };
+})();
+</script>
+
+<script>
+var __p = location.pathname.replace(/\/+$/, '') || '/';
+window.XFLIX_CONFIG = {
+  homeRoutes: [__p],
+  waitForAuthMs: 4000,
+  fonts: true,
+  cacheMs: 1000000000,
+  claimCme: {
+    'ResusX:2026': {
+      'Day 1 · Airway & Breathing': 'https://example.com/claim-resusx-2026-day-1',
+      'Day 2 · Circulation & Shock': 'https://example.com/claim-resusx-2026-day-2',
+      'Day 3 · Neuro & Tox': 'https://example.com/claim-resusx-2026-day-3'
+    },
+    'ResusX:2025': { 'Day 1 · Airway & Ventilation': 'https://example.com/claim-resusx-2025-day-1' }
+  }
+};
+</script>
+
+<script>
+/*XFLIX_JS*/
+</script>
+
+<script>
+(function () {
+  /* The portal itself makes a data request with a login header; XFlix reuses it. Imitate that once. */
+  fetch(window.__mock.API + '/courses/learners/locations/' + window.__mock.LOC + '/courses/library', { headers: { Authorization: 'Bearer demo', channel: 'APP' } }).catch(function () {});
+  var boot = document.getElementById('xf-boot');
+  if (boot) boot.remove();
+
+  /* Lecture, Resume, Claim CME and Account links leave XFlix. In the real portal they open GHL's own pages. */
+  var ghl = document.getElementById('xf-ghl');
+  var h = document.getElementById('xf-ghl-h');
+  var p = document.getElementById('xf-ghl-p');
+  var back = document.getElementById('xf-ghl-back');
+  function show(title, text) { h.textContent = title; p.textContent = text; ghl.hidden = false; back.focus(); }
+  back.addEventListener('click', function () { ghl.hidden = true; });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') ghl.hidden = true; });
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a || a.closest('#xf-mock-ui') || a.closest('#xf-ghl') || a.classList.contains('xf-title-tile')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (a.classList.contains('xf-tile')) {
+      var t = a.querySelector('.xf-tile-t');
+      show('GHL lesson page: ' + (t ? t.textContent : 'lecture'), 'GHL plays the video here, shows its own "Mark as Complete" button and records completion. When the learner comes back to XFlix, this lecture shows a teal check and "Watched".');
+    } else if (a.classList.contains('teal')) {
+      show('Your Claim CME page', 'The "Claim CME" button opens whatever link you set for this folder, in a new tab. XFlix does not track credit; learners claim it on your page.');
+    } else if (a.classList.contains('primary')) {
+      show('GHL lesson page: resume where you left off', 'The Resume button opens the lecture the learner was last on. GHL plays it and keeps the progress.');
+    } else {
+      show("GHL's portal home", 'The Account link goes to GHL’s own portal home (profile, billing and the rest), outside XFlix.');
+    }
+  }, true);
+
+  /* Scenario buttons */
+  var btns = document.querySelectorAll('#xf-mock-ui button');
+  Array.prototype.forEach.call(btns, function (b) {
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(btns, function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      window.__mock.set(b.getAttribute('data-s'));
+    });
+  });
+})();
+</script>

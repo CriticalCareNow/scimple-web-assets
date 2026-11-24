@@ -1,4 +1,4 @@
-/*! XFlix 1.0.0
+/*! XFlix 1.0.1
  * Netflix-style course browsing for the GoHighLevel Client Portal.
  *
  * What it does
@@ -22,7 +22,7 @@
   'use strict';
   if (window.__xflix) return;
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.1';
 
   var DEFAULTS = {
     enabled: true,
@@ -40,6 +40,7 @@
     fonts: true,
     claimCme: {},
     heroImages: {},
+    homeScreen: null,
     catalog: null,
     colors: {},
     routes: {
@@ -620,12 +621,13 @@
     var c = cfg.colors || {};
     var vars = '--xf-bg:' + (c.bg || '#0B0B0D') + ';--xf-surface:' + (c.surface || '#141418') + ';--xf-raised:' + (c.raised || '#1E1E24') +
       ';--xf-line:' + (c.line || '#2A2A31') + ';--xf-accent:' + (c.accent || '#FF7A1A') + ';--xf-accent2:' + (c.accent2 || '#18C5BB') +
-      ';--xf-text:' + (c.text || '#F5F1EA') + ';--xf-muted:' + (c.muted || '#9A968F') + ';';
+      ';--xf-text:' + (c.text || '#F5F1EA') + ';--xf-muted:' + (c.muted || '#9A968F') + ';' +
+      '--xf-gl:max(clamp(16px,4vw,48px),env(safe-area-inset-left,0px));--xf-gr:max(clamp(16px,4vw,48px),env(safe-area-inset-right,0px));';
     return '#xflix-root{' + vars + 'position:fixed;inset:0;z-index:2147483000;overflow:auto;background:var(--xf-bg);color:var(--xf-text);' +
-      'font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.4;-webkit-font-smoothing:antialiased}' +
+      'font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.4;-webkit-font-smoothing:antialiased;overscroll-behavior:contain;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;touch-action:manipulation}' +
       '#xflix-root *{box-sizing:border-box}#xflix-root a{color:inherit;text-decoration:none}' +
       '#xflix-root button,#xflix-root select{font:inherit;color:inherit}' +
-      '.xf-top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:28px;padding:14px clamp(16px,4vw,48px);background:linear-gradient(rgba(11,11,13,.92),rgba(11,11,13,0));transition:background .2s}' +
+      '.xf-top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:28px;padding:14px var(--xf-gr) 14px var(--xf-gl);background:linear-gradient(rgba(11,11,13,.92),rgba(11,11,13,0));transition:background .2s}' +
       '.xf-top.solid{background:var(--xf-bg);box-shadow:0 1px 0 var(--xf-line)}' +
       '.xf-logo{display:inline-flex;align-items:center;gap:2px;font:900 clamp(24px,3vw,32px)/1 "Big Shoulders Display",Impact,"Arial Narrow",sans-serif;letter-spacing:.02em;border:0;background:none;padding:0;cursor:pointer}' +
       '.xf-logo b{background:linear-gradient(180deg,#fff1d2,#ffbf5e 45%,var(--xf-accent));-webkit-background-clip:text;background-clip:text;color:transparent}' +
@@ -634,8 +636,8 @@
       '.xf-nav a,.xf-nav button{background:none;border:0;padding:6px 0;cursor:pointer;color:inherit}' +
       '.xf-nav .on,.xf-nav a:hover,.xf-nav button:hover{color:var(--xf-text)}' +
       '.xf-spacer{flex:1}' +
-      '.xf-main{padding-bottom:64px}' +
-      '.xf-hero{position:relative;min-height:min(62vh,560px);display:flex;align-items:flex-end;padding:0 clamp(16px,4vw,48px) 56px;margin-top:-62px;overflow:hidden}' +
+      '.xf-main{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}' +
+      '.xf-hero{position:relative;min-height:min(62vh,560px);min-height:min(62dvh,560px);display:flex;align-items:flex-end;padding:0 var(--xf-gr) 56px var(--xf-gl);margin-top:-62px;overflow:hidden}' +
       '.xf-hero .xf-poster{position:absolute;inset:0;border-radius:0;aspect-ratio:auto}' +
       '.xf-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0b0b0dee 0%,#0b0b0d80 45%,transparent 75%),linear-gradient(transparent 55%,var(--xf-bg) 98%)}' +
       '.xf-hero-copy{position:relative;z-index:2;max-width:620px;padding-top:120px}' +
@@ -648,20 +650,20 @@
       '.xf-btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:6px;padding:11px 24px;font-weight:700;font-size:16px;cursor:pointer;background:#ffffff2b;color:var(--xf-text)}' +
       '.xf-btn.primary{background:var(--xf-accent);color:#1a0900}.xf-btn.teal{background:transparent;border:1.5px solid var(--xf-accent2);color:var(--xf-accent2);padding:9px 18px;font-size:14px}' +
       '.xf-btn:hover{filter:brightness(1.12)}.xf-btn .xf-ico{width:1em;height:1em;display:inline-flex}.xf-ico svg{width:100%;height:100%}' +
-      '.xf-select{appearance:none;background:#0b0b0dcc;border:1.5px solid #8a8680;border-radius:6px;padding:9px 34px 9px 14px;font-weight:600;cursor:pointer;' +
+      '.xf-select{appearance:none;background:#0b0b0dcc;border:1.5px solid #8a8680;border-radius:6px;padding:9px 34px 9px 14px;font-weight:600;font-size:16px;cursor:pointer;' +
       'background-image:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\'%3E%3Cpath d=\'M6 9l6 6 6-6\' fill=\'none\' stroke=\'%23F5F1EA\' stroke-width=\'2.4\'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;background-size:18px}' +
       '.xf-select option{background:#1E1E24;color:#F5F1EA}' +
-      '.xf-row{margin:30px 0 0;padding-left:clamp(16px,4vw,48px)}' +
-      '.xf-row-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin:0 clamp(16px,4vw,48px) 12px 0}' +
+      '.xf-row{margin:30px 0 0;padding-left:var(--xf-gl)}' +
+      '.xf-row-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin:0 var(--xf-gr) 12px 0}' +
       '.xf-row-h h2{margin:0;font-size:clamp(18px,2vw,22px);font-weight:700}' +
       '.xf-row-meta{font-size:13px;color:var(--xf-muted)}' +
       '.xf-row-h .xf-btn.teal{margin-left:auto}' +
       '.xf-scroller{position:relative}' +
-      '.xf-track{display:flex;gap:10px;overflow-x:auto;padding:10px clamp(16px,4vw,48px) 14px 12px;margin:-6px 0 0 -12px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#3a3a42 transparent}' +
+      '.xf-track{display:flex;gap:10px;overflow-x:auto;padding:10px var(--xf-gr) 14px 12px;margin:-6px 0 0 -12px;scroll-padding-left:12px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#3a3a42 transparent}' +
       '.xf-arrow{position:absolute;top:0;bottom:56px;width:48px;z-index:5;border:0;background:linear-gradient(90deg,#0b0b0dee,transparent);color:#fff;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center}' +
       '.xf-arrow.r{right:0;background:linear-gradient(270deg,#0b0b0dee,transparent)}.xf-arrow.l{left:-1px}' +
       '.xf-scroller:hover .xf-arrow{opacity:1}.xf-arrow[hidden]{display:none}.xf-arrow .xf-ico{width:28px;height:28px;display:inline-flex}' +
-      '.xf-tile{position:relative;flex:0 0 clamp(210px,19vw,290px);scroll-snap-align:start;display:block;transition:transform .15s}' +
+      '.xf-tile{position:relative;flex:0 0 clamp(210px,19vw,390px);scroll-snap-align:start;display:block;transition:transform .15s}' +
       '.xf-tile:hover,.xf-tile:focus-visible{transform:scale(1.035);z-index:3}' +
       '.xf-tile:focus-visible{outline:2px solid var(--xf-accent);outline-offset:3px;border-radius:6px}' +
       '.xf-tile.is-locked{cursor:not-allowed}.xf-tile.is-locked:hover{transform:none}.xf-tile.is-locked .xf-poster{filter:grayscale(.7) brightness(.55)}' +
@@ -682,18 +684,21 @@
       '.xf-tile-s{margin:2px 2px 0;font-size:13px;color:var(--xf-muted)}' +
       '.xf-tile.done .xf-tile-s{color:var(--xf-accent2)}' +
       '.xf-title-tile .xf-poster{aspect-ratio:16/9}' +
-      '.xf-tile .xf-name{position:absolute;z-index:2;left:12px;right:12px;bottom:12px;font:900 clamp(22px,2.2vw,30px)/.9 "Big Shoulders Display",Impact,"Arial Narrow",sans-serif;text-transform:uppercase;text-shadow:0 2px 12px #000}' +
+      '.xf-tile .xf-name{position:absolute;z-index:2;left:12px;right:12px;bottom:12px;font:900 clamp(22px,2.2vw,38px)/.9 "Big Shoulders Display",Impact,"Arial Narrow",sans-serif;text-transform:uppercase;text-shadow:0 2px 12px #000}' +
       '.xf-back{background:none;border:0;color:var(--xf-muted);cursor:pointer;padding:0;margin:0 0 14px;font-size:14px}.xf-back:hover{color:var(--xf-text)}' +
-      '.xf-note{margin:30px clamp(16px,4vw,48px);padding:16px 18px;border:1px solid var(--xf-line);border-radius:8px;background:var(--xf-surface);color:var(--xf-muted);font-size:14px}' +
+      '.xf-note{margin:30px var(--xf-gr) 30px var(--xf-gl);padding:16px 18px;border:1px solid var(--xf-line);border-radius:8px;background:var(--xf-surface);color:var(--xf-muted);font-size:14px}' +
       '.xf-note a{color:var(--xf-accent);text-decoration:underline}' +
-      '.xf-lockrow{margin:0 clamp(16px,4vw,48px) 6px 0;font-size:13px;color:var(--xf-muted)}' +
+      '.xf-lockrow{margin:0 var(--xf-gr) 6px 0;font-size:13px;color:var(--xf-muted)}' +
       '.xf-skel .xf-poster{background:linear-gradient(90deg,#16161a,#202027,#16161a);background-size:200% 100%;animation:xfsh 1.3s linear infinite}' +
       '.xf-skel .xf-poster::before{display:none}' +
       '@keyframes xfsh{to{background-position:-200% 0}}' +
-      '.xf-modal{position:fixed;inset:0;z-index:30;background:#000c;display:flex;align-items:center;justify-content:center;padding:16px}' +
+      '.xf-modal{position:fixed;inset:0;z-index:30;background:#000c;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}' +
       '.xf-modal>div{width:min(720px,100%);background:var(--xf-surface);border:1px solid var(--xf-line);border-radius:10px;padding:18px;display:grid;gap:12px}' +
-      '.xf-modal textarea{width:100%;height:46vh;background:var(--xf-bg);color:var(--xf-text);border:1px solid var(--xf-line);border-radius:6px;padding:10px;font:12px ui-monospace,Menlo,monospace}' +
-      '@media (max-width:720px){.xf-nav{gap:14px}.xf-hero{min-height:56vh;padding-bottom:36px}.xf-tile{flex-basis:70vw}.xf-arrow{display:none}.xf-btn{padding:10px 18px;font-size:15px}}' +
+      '.xf-modal textarea{width:100%;height:46vh;height:46dvh;background:var(--xf-bg);color:var(--xf-text);border:1px solid var(--xf-line);border-radius:6px;padding:10px;font:12px ui-monospace,Menlo,monospace}' +
+      '@media (max-width:720px){.xf-nav{gap:14px}.xf-hero{min-height:56vh;min-height:56dvh;padding-bottom:36px}.xf-tile{flex-basis:70vw}.xf-arrow{display:none}.xf-btn{padding:10px 18px;font-size:15px}}' +
+      '@media (hover:none){.xf-tile:hover,.xf-tile.is-locked:hover{transform:none}.xf-btn:hover{filter:none}.xf-nav a:hover,.xf-nav button:hover{color:inherit}.xf-nav .on:hover{color:var(--xf-text)}.xf-arrow{display:none}.xf-tile:active{transform:scale(.97)}.xf-tile.is-locked:active{transform:none}.xf-btn:active{filter:brightness(1.2)}}' +
+      '@media (pointer:coarse){.xf-nav a,.xf-nav button{padding:13px 0}.xf-back{padding:13px 0;margin:0 0 4px}.xf-btn{min-height:44px;justify-content:center}.xf-btn.teal{padding:11px 18px}.xf-select{min-height:44px}.xf-logo{min-height:44px}}' +
+      '@media (max-height:500px) and (orientation:landscape){.xf-hero{min-height:0;padding-bottom:28px}.xf-hero-copy{padding-top:84px}.xf-h1{font-size:clamp(34px,7vw,56px)}}' +
       '@media (prefers-reduced-motion:reduce){#xflix-root *{animation:none!important;transition:none!important}}';
   }
 
@@ -723,9 +728,33 @@
     document.head.appendChild(l);
   }
 
+  /* Optional iPhone/iPad "Add to Home Screen" setup. Off unless config.homeScreen is set.
+     Adds only tags the portal does not already have. It never changes the portal's viewport tag. */
+  function injectHomeScreen() {
+    var hs = cfg.homeScreen;
+    if (!hs || document.getElementById('xflix-homescreen')) return;
+    if (hs === true) hs = {};
+    var marker = el('meta', { id: 'xflix-homescreen', name: 'xflix-homescreen', content: '1' });
+    document.head.appendChild(marker);
+    function addMeta(name, content) {
+      if (document.querySelector('meta[name="' + name + '"]')) return;
+      document.head.appendChild(el('meta', { name: name, content: content }));
+    }
+    addMeta('apple-mobile-web-app-capable', 'yes');
+    addMeta('mobile-web-app-capable', 'yes');
+    addMeta('apple-mobile-web-app-status-bar-style', 'black');
+    addMeta('apple-mobile-web-app-title', String(hs.title || cfg.brandName || 'XFlix').slice(0, 30));
+    addMeta('theme-color', (cfg.colors && cfg.colors.bg) || '#0B0B0D');
+    var icon = safeUrl(hs.icon);
+    if (icon && !document.querySelector('link[rel="apple-touch-icon"]')) {
+      document.head.appendChild(el('link', { rel: 'apple-touch-icon', href: icon }));
+    }
+  }
+
   function ensureRoot() {
     injectStyle();
     injectFonts();
+    injectHomeScreen();
     var root = document.getElementById('xflix-root');
     if (!root) {
       root = el('div', { id: 'xflix-root', role: 'main', 'aria-label': cfg.brandName + ' course library' });
